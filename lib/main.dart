@@ -1,5 +1,6 @@
-import 'package:eshtri/layout/home_layout.dart';
 import 'package:flutter/material.dart';
+
+import 'modules/on_boarding/on_boarding_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomeLayout(),
+      home: const OnBoardingScreen(),
     );
   }
 }
