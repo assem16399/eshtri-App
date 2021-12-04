@@ -1,3 +1,3 @@
 import 'package:flutter/material.dart';
 
-const kPrimarySwatchColor = Colors.deepOrange;
+const kPrimarySwatchColor = Colors.deepPurple;

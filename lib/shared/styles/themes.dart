@@ -62,7 +62,7 @@ final lightTheme = ThemeData(
   ),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: Colors.white,
-    selectedItemColor: Colors.deepOrange,
+    selectedItemColor: kPrimarySwatchColor,
     unselectedItemColor: Colors.black,
     showUnselectedLabels: true,
     showSelectedLabels: true,
