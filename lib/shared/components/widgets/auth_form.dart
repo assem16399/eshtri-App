@@ -1,6 +1,10 @@
+import 'package:eshtri/modules/login/cubit/login_cubit.dart';
+import 'package:eshtri/modules/login/cubit/login_states.dart';
 import 'package:eshtri/modules/register/register_screen.dart';
+
 import 'package:eshtri/shared/styles/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'default_text_filed.dart';
 
@@ -15,16 +19,34 @@ class AuthForm extends StatefulWidget {
 }
 
 class _AuthFormState extends State<AuthForm> {
+  var authDate = <String, String>{
+    'email': '',
+    'password': '',
+  };
   var _isPasswordVisible = false;
+  final formKey = GlobalKey<FormState>();
+
+  void submitAuthForm() {
+    if (formKey.currentState!.validate()) {
+      formKey.currentState!.save();
+      BlocProvider.of<LoginCubit>(context, listen: false)
+          .logUserIn(authDate['email']!, authDate['password']!);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     return Form(
+      key: formKey,
       child: SingleChildScrollView(
         child: Column(
           children: [
             DefaultTextField(
               label: 'Email',
+              onSaved: (value) {
+                authDate['email'] = value!;
+              },
               preIcon: Icons.email_outlined,
               type: TextInputType.emailAddress,
               validator: (value) {
@@ -53,8 +75,26 @@ class _AuthFormState extends State<AuthForm> {
                 }
                 return null;
               },
+              onSaved: (value) {
+                authDate['password'] = value!;
+              },
+              onSubmit: (_) {
+                submitAuthForm();
+              },
             ),
-            const AuthButton(),
+            BlocConsumer<LoginCubit, LoginStates>(
+              listener: (context, loginState) {},
+              builder: (context, loginState) {
+                return loginState is! LoginLoadingState
+                    ? AuthButton(
+                        title: widget.currentAuthMode == AuthMode.login ? 'LOGIN' : 'Register',
+                        onPressed: submitAuthForm,
+                      )
+                    : const Center(
+                        child: CircularProgressIndicator(),
+                      );
+              },
+            ),
             SizedBox(
               height: deviceSize.height * 0.01,
             ),
@@ -97,18 +137,15 @@ class _AuthFormState extends State<AuthForm> {
 }
 
 class AuthButton extends StatelessWidget {
-  const AuthButton({
-    Key? key,
-  }) : super(key: key);
+  final void Function() onPressed;
+  final String title;
+  const AuthButton({Key? key, required this.onPressed, required this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
-      child: Text(
-        'LOGIN',
-        style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.white),
-      ),
+      onPressed: onPressed,
+      child: Text(title),
       style: ButtonStyle(
         minimumSize: MaterialStateProperty.all(
           const Size(double.infinity, 50),

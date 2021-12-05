@@ -1,3 +1,4 @@
+import 'package:eshtri/modules/login/cubit/login_cubit.dart';
 import 'package:eshtri/shared/cubit/app_cubit.dart';
 import 'package:eshtri/shared/cubit/app_states.dart';
 import 'package:eshtri/shared/styles/themes.dart';
@@ -35,7 +36,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => AppCubit()..toggleThemeMode(sharedPrefIsDark)),
+        BlocProvider(
+          create: (context) => AppCubit()..toggleThemeMode(sharedPrefIsDark),
+        ),
+        BlocProvider(
+          create: (context) => LoginCubit(),
+        )
       ],
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (context, appState) {},

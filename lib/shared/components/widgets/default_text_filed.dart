@@ -5,33 +5,34 @@ class DefaultTextField extends StatelessWidget {
   final bool isVisible;
   final String label;
   final IconData preIcon;
-  final IconData? sufIcon;
-  //final bool isSecuredText;
+  late final IconData? sufIcon;
   final TextInputType type;
   final void Function(String? value)? onSaved;
   final String? Function(String? value)? validator;
+  final String? Function(String? value)? onSubmit;
   final void Function()? onSuffixIconTap;
   final void Function()? onTap;
-  const DefaultTextField({
-    Key? key,
-    this.controller,
-    required this.label,
-    required this.preIcon,
-    required this.type,
-    this.onSaved,
-    required this.validator,
-    // this.isSecuredText = false,
-    this.sufIcon = null,
-    this.isVisible = false,
-    this.onSuffixIconTap,
-    this.onTap,
-  }) : super(key: key);
+  DefaultTextField(
+      {Key? key,
+      this.controller,
+      required this.label,
+      required this.preIcon,
+      required this.type,
+      this.onSaved,
+      required this.validator,
+      this.sufIcon,
+      this.isVisible = true,
+      this.onSuffixIconTap,
+      this.onTap,
+      this.onSubmit})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: TextFormField(
+        onFieldSubmitted: onSubmit,
         controller: controller,
         onTap: onTap,
         keyboardType: type,
