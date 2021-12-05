@@ -6,31 +6,31 @@ import 'package:eshtri/shared/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'auth_button.dart';
 import 'default_text_filed.dart';
 
-enum AuthMode { login, signup, forgetPassword }
-
-class AuthForm extends StatefulWidget {
-  const AuthForm({Key? key, this.currentAuthMode = AuthMode.login}) : super(key: key);
-  final AuthMode currentAuthMode;
+class LoginForm extends StatefulWidget {
+  const LoginForm({
+    Key? key,
+  }) : super(key: key);
 
   @override
-  _AuthFormState createState() => _AuthFormState();
+  _LoginFormState createState() => _LoginFormState();
 }
 
-class _AuthFormState extends State<AuthForm> {
-  var authDate = <String, String>{
+class _LoginFormState extends State<LoginForm> {
+  var loginData = <String, String>{
     'email': '',
     'password': '',
   };
   var _isPasswordVisible = false;
   final formKey = GlobalKey<FormState>();
 
-  void submitAuthForm() {
+  void submitLoginForm() {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
       BlocProvider.of<LoginCubit>(context, listen: false)
-          .logUserIn(authDate['email']!, authDate['password']!);
+          .logUserIn(loginData['email']!, loginData['password']!);
     }
   }
 
@@ -45,7 +45,7 @@ class _AuthFormState extends State<AuthForm> {
             DefaultTextField(
               label: 'Email',
               onSaved: (value) {
-                authDate['email'] = value!;
+                loginData['email'] = value!;
               },
               preIcon: Icons.email_outlined,
               type: TextInputType.emailAddress,
@@ -76,10 +76,10 @@ class _AuthFormState extends State<AuthForm> {
                 return null;
               },
               onSaved: (value) {
-                authDate['password'] = value!;
+                loginData['password'] = value!;
               },
               onSubmit: (_) {
-                submitAuthForm();
+                submitLoginForm();
               },
             ),
             BlocConsumer<LoginCubit, LoginStates>(
@@ -87,8 +87,8 @@ class _AuthFormState extends State<AuthForm> {
               builder: (context, loginState) {
                 return loginState is! LoginLoadingState
                     ? AuthButton(
-                        title: widget.currentAuthMode == AuthMode.login ? 'LOGIN' : 'Register',
-                        onPressed: submitAuthForm,
+                        title: 'LOGIN',
+                        onPressed: submitLoginForm,
                       )
                     : const Center(
                         child: CircularProgressIndicator(),
@@ -102,25 +102,19 @@ class _AuthFormState extends State<AuthForm> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  widget.currentAuthMode == AuthMode.login
-                      ? 'Don\'t have an account?'
-                      : 'Already have an account?',
+                  'Don\'t have an account?',
                   style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 15),
                 ),
                 TextButton(
                   onPressed: () {
-                    if (widget.currentAuthMode == AuthMode.login) {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const RegisterScreen(),
-                        ),
-                      );
-                    } else {
-                      Navigator.of(context).pop();
-                    }
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const RegisterScreen(),
+                      ),
+                    );
                   },
                   child: Text(
-                    widget.currentAuthMode == AuthMode.login ? 'Register Now.' : 'Login',
+                    'Register Now.',
                     style: Theme.of(context)
                         .textTheme
                         .bodyText1!
@@ -130,25 +124,6 @@ class _AuthFormState extends State<AuthForm> {
               ],
             )
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class AuthButton extends StatelessWidget {
-  final void Function() onPressed;
-  final String title;
-  const AuthButton({Key? key, required this.onPressed, required this.title}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      child: Text(title),
-      style: ButtonStyle(
-        minimumSize: MaterialStateProperty.all(
-          const Size(double.infinity, 50),
         ),
       ),
     );

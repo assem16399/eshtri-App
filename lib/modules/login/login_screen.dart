@@ -1,4 +1,4 @@
-import 'package:eshtri/shared/components/widgets/auth_form.dart';
+import 'package:eshtri/shared/components/widgets/login_form.dart';
 import 'package:eshtri/shared/styles/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +31,7 @@ class LoginScreen extends StatelessWidget {
                 ),
                 const Padding(
                   padding: EdgeInsets.only(top: 16.0),
-                  child: AuthForm(),
+                  child: LoginForm(),
                 )
               ],
             ),
