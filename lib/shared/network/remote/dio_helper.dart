@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
 class DioHelper {
-  static Dio? dio;
+  static late Dio dio;
   static init() {
     dio = Dio(BaseOptions(
       baseUrl: 'https://student.valuxapps.com/api/',
@@ -16,12 +16,12 @@ class DioHelper {
     String lang = 'en',
     String? token,
   }) async {
-    dio!.options.headers = {
+    dio.options.headers = {
       'lang': lang,
       'Authorization': token,
     };
 
-    return await dio!.get(path, queryParameters: queryParameters);
+    return await dio.get(path, queryParameters: queryParameters);
   }
 
   static Future<Response> postRequest({
@@ -31,12 +31,12 @@ class DioHelper {
     String lang = 'en',
     String? token,
   }) async {
-    dio!.options.headers = {
+    dio.options.headers = {
       'lang': lang,
       'Authorization': token,
     };
 
-    return await dio!.post(
+    return await dio.post(
       path,
       queryParameters: queryParameters,
       data: data,
