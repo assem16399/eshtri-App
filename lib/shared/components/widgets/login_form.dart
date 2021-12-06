@@ -1,3 +1,4 @@
+import 'package:eshtri/layout/home_layout.dart';
 import 'package:eshtri/modules/login/cubit/login_cubit.dart';
 import 'package:eshtri/modules/login/cubit/login_states.dart';
 import 'package:eshtri/modules/register/register_screen.dart';
@@ -83,7 +84,12 @@ class _LoginFormState extends State<LoginForm> {
               },
             ),
             BlocConsumer<LoginCubit, LoginStates>(
-              listener: (context, loginState) {},
+              listener: (context, loginState) {
+                if (loginState is LoginSuccessState) {
+                  Navigator.of(context)
+                      .pushReplacement(MaterialPageRoute(builder: (context) => const HomeLayout()));
+                }
+              },
               builder: (context, loginState) {
                 return loginState is! LoginLoadingState
                     ? AuthButton(

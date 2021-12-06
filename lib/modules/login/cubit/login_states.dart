@@ -7,3 +7,5 @@ class LoginSuccessState extends LoginStates {}
 class LoginFailState extends LoginStates {}
 
 class LoginLoadingState extends LoginStates {}
+
+class LoginKillTokenState extends LoginStates {}

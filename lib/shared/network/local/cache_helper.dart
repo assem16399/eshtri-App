@@ -6,18 +6,29 @@ class CacheHelper {
     sharedPreferences = await SharedPreferences.getInstance();
   }
 
-  static void saveDataInPref(bool isDarkModeOn) {
-    sharedPreferences!.setBool('themeMode', isDarkModeOn);
+  static Future<bool> setData({required String key, required dynamic value}) async {
+    if (value is int) {
+      return await sharedPreferences!.setInt(key, value);
+    }
+    if (value is bool) {
+      return await sharedPreferences!.setBool(key, value);
+    }
+    if (value is String) {
+      return await sharedPreferences!.setString(key, value);
+    }
+    return await sharedPreferences!.setDouble(key, value);
   }
 
-  static bool? getSavedDataInPref() {
-    final extractedModeInfo = sharedPreferences!.getBool('themeMode');
-    if (extractedModeInfo == null) return null;
-
-    return extractedModeInfo;
+  static dynamic getData({required String key}) {
+    return sharedPreferences!.get(key);
   }
 
-  static clear() {
-    sharedPreferences!.remove('themeMode');
+  static Future<bool> clear(String key) async {
+    return await sharedPreferences!.remove(key);
   }
+
+  // If you want to use it instead of setData, but you will have to send the value im a map
+  // static Future<bool> setData2({required String key, required Map<String,dynamic> value}) async {
+  //   return await sharedPreferences!.setString(key, jsonEncode(value));
+  // }
 }

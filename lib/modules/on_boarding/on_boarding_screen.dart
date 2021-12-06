@@ -1,4 +1,5 @@
 import 'package:eshtri/modules/login/login_screen.dart';
+import 'package:eshtri/shared/network/local/cache_helper.dart';
 import 'package:eshtri/shared/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -34,6 +35,16 @@ class OnBoardingScreen extends StatelessWidget {
         screenTitle: 'On Boarding 3 Title',
         screenBody: 'On Boarding 3 Body'),
   ];
+
+  void skipOnBoarding(BuildContext context) async {
+    await CacheHelper.setData(key: 'boarded', value: true);
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => const LoginScreen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,11 +52,7 @@ class OnBoardingScreen extends StatelessWidget {
         actions: [
           TextButton(
               onPressed: () {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => const LoginScreen(),
-                  ),
-                );
+                skipOnBoarding(context);
               },
               child: const Text(
                 'SKIP',
@@ -86,11 +93,7 @@ class OnBoardingScreen extends StatelessWidget {
                 FloatingActionButton(
                   onPressed: () {
                     if (_isLastBoardingReached) {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) => const LoginScreen(),
-                        ),
-                      );
+                      skipOnBoarding(context);
                     } else {
                       pageViewController.nextPage(
                           duration: const Duration(milliseconds: 300), curve: Curves.linear);

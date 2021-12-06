@@ -1,4 +1,6 @@
+import 'package:eshtri/layout/home_layout.dart';
 import 'package:eshtri/modules/login/cubit/login_cubit.dart';
+import 'package:eshtri/modules/login/login_screen.dart';
 import 'package:eshtri/shared/cubit/app_cubit.dart';
 import 'package:eshtri/shared/cubit/app_states.dart';
 import 'package:eshtri/shared/styles/themes.dart';
@@ -16,10 +18,25 @@ void main() async {
   DioHelper.init();
   await CacheHelper.init();
 
-  final mode = CacheHelper.getSavedDataInPref();
+  final mode = CacheHelper.getData(key: 'themeMode');
+  final boarded = CacheHelper.getData(key: 'boarded');
+  final token = CacheHelper.getData(key: 'token');
+  Widget homeScreen() {
+    if (boarded != null && boarded != false) {
+      if (token != null) {
+        return const HomeLayout();
+      } else {
+        return const LoginScreen();
+      }
+    } else {
+      return OnBoardingScreen();
+    }
+  }
+
   BlocOverrides.runZoned(
     () {
       runApp(MyApp(
+        homeScreen: homeScreen(),
         sharedPrefIsDark: mode,
       ));
     },
@@ -29,7 +46,8 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final bool? sharedPrefIsDark;
-  const MyApp({Key? key, this.sharedPrefIsDark}) : super(key: key);
+  final Widget homeScreen;
+  const MyApp({Key? key, this.sharedPrefIsDark, required this.homeScreen}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -44,15 +62,17 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: BlocConsumer<AppCubit, AppStates>(
-        listener: (context, appState) {},
-        builder: (context, appState) => MaterialApp(
-          theme: lightTheme,
-          darkTheme: darkTheme,
-          themeMode: BlocProvider.of<AppCubit>(context).isDark ? ThemeMode.dark : ThemeMode.light,
-          title: 'Flutter Demo',
-          home: OnBoardingScreen(),
-        ),
-      ),
+          listener: (context, appState) {},
+          builder: (context, appState) {
+            return MaterialApp(
+              theme: lightTheme,
+              darkTheme: darkTheme,
+              themeMode:
+                  BlocProvider.of<AppCubit>(context).isDark ? ThemeMode.dark : ThemeMode.light,
+              title: 'Flutter Demo',
+              home: homeScreen,
+            );
+          }),
     );
   }
 }
