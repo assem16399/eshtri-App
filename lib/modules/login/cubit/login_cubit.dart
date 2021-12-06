@@ -8,20 +8,22 @@ import 'package:eshtri/shared/network/remote/dio_helper.dart';
 
 class LoginCubit extends Cubit<LoginStates> {
   LoginCubit() : super(LoginInitialState());
+
+  LoginModel? _loginModel;
   void logUserIn(String email, String password) async {
     emit(LoginLoadingState());
     try {
       final response = await DioHelper.postRequest(
           path: kLoginEndPoint, data: {'email': email, 'password': password});
 
-      final LoginModel loginModel = LoginModel.fromJson(response.data);
+      _loginModel = LoginModel.fromJson(response.data);
 
-      if (loginModel.status) {
-        toast(toastMsg: loginModel.message);
+      if (_loginModel!.status) {
+        toast(toastMsg: _loginModel!.message);
         emit(LoginSuccessState());
-        CacheHelper.setData(key: 'token', value: loginModel.data!.token);
+        CacheHelper.setData(key: 'token', value: _loginModel!.data!.token);
       } else {
-        toast(toastMsg: loginModel.message);
+        toast(toastMsg: _loginModel!.message);
         emit(LoginFailState());
       }
     } catch (error) {
