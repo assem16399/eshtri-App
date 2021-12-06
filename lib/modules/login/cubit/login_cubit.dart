@@ -9,6 +9,7 @@ import 'package:eshtri/shared/network/remote/dio_helper.dart';
 class LoginCubit extends Cubit<LoginStates> {
   LoginCubit() : super(LoginInitialState());
 
+
   LoginModel? _loginModel;
   void logUserIn(String email, String password) async {
     emit(LoginLoadingState());
