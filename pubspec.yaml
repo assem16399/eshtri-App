@@ -39,6 +39,8 @@ dependencies:
   dio: ^4.0.4
   shared_preferences: ^2.0.9
   smooth_page_indicator: ^1.0.0+2
+  fluttertoast: ^8.0.8
+
   #intl: ^0.17.0
   #sqflite: ^2.0.0+4
   #path: ^1.8.0
