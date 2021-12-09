@@ -21,10 +21,11 @@ final darkTheme = ThemeData(
       statusBarColor: Color(0XFF333739),
     ),
   ),
-  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-    backgroundColor: Color(0XFF333739),
+  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    selectedIconTheme: const IconThemeData(size: 35),
+    backgroundColor: const Color(0XFF333739),
     selectedItemColor: Colors.deepOrange,
-    unselectedItemColor: Colors.grey,
+    unselectedItemColor: Colors.grey[500],
     showUnselectedLabels: true,
     showSelectedLabels: true,
   ),
@@ -53,17 +54,18 @@ final lightTheme = ThemeData(
       fontSize: 20.0,
       fontWeight: FontWeight.w500,
     ),
-    iconTheme: IconThemeData(color: Colors.black),
+    iconTheme: IconThemeData(color: Colors.black, size: 30),
     elevation: 0,
     systemOverlayStyle: SystemUiOverlayStyle(
       statusBarIconBrightness: Brightness.dark,
       statusBarColor: Colors.white,
     ),
   ),
-  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+  bottomNavigationBarTheme: BottomNavigationBarThemeData(
     backgroundColor: Colors.white,
+    selectedIconTheme: const IconThemeData(size: 35),
     selectedItemColor: kPrimarySwatchColor,
-    unselectedItemColor: Colors.black,
+    unselectedItemColor: Colors.grey[500],
     showUnselectedLabels: true,
     showSelectedLabels: true,
   ),

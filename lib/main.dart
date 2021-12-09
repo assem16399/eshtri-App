@@ -1,6 +1,9 @@
 import 'package:eshtri/layout/home_layout.dart';
+import 'package:eshtri/modules/home/cubit/home_cubit.dart';
 import 'package:eshtri/modules/login/cubit/login_cubit.dart';
 import 'package:eshtri/modules/login/login_screen.dart';
+import 'package:eshtri/modules/search/search_screen.dart';
+import 'package:eshtri/shared/components/constants/constants.dart';
 import 'package:eshtri/shared/cubit/app_cubit.dart';
 import 'package:eshtri/shared/cubit/app_states.dart';
 import 'package:eshtri/shared/styles/themes.dart';
@@ -20,10 +23,10 @@ void main() async {
 
   final mode = CacheHelper.getData(key: 'themeMode');
   final boarded = CacheHelper.getData(key: 'boarded');
-  final token = CacheHelper.getData(key: 'token');
+  userAccessToken = CacheHelper.getData(key: 'token');
   Widget homeScreen() {
     if (boarded != null && boarded != false) {
-      if (token != null) {
+      if (userAccessToken != null) {
         return const HomeLayout();
       } else {
         return const LoginScreen();
@@ -59,20 +62,24 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => LoginCubit(),
+        ),
+        BlocProvider(
+          create: (context) => HomeCubit()..getHomeData(userAccessToken!),
         )
       ],
       child: BlocConsumer<AppCubit, AppStates>(
-          listener: (context, appState) {},
-          builder: (context, appState) {
-            return MaterialApp(
-              theme: lightTheme,
-              darkTheme: darkTheme,
-              themeMode:
-                  BlocProvider.of<AppCubit>(context).isDark ? ThemeMode.dark : ThemeMode.light,
-              title: 'Flutter Demo',
-              home: homeScreen,
-            );
-          }),
+        listener: (context, appState) {},
+        builder: (context, appState) {
+          return MaterialApp(
+            theme: lightTheme,
+            darkTheme: darkTheme,
+            themeMode: BlocProvider.of<AppCubit>(context).isDark ? ThemeMode.dark : ThemeMode.light,
+            title: 'Flutter Demo',
+            home: homeScreen,
+            routes: {SearchScreen.routeName: (context) => const SearchScreen()},
+          );
+        },
+      ),
     );
   }
 }

@@ -1,7 +1,9 @@
-import 'package:eshtri/modules/login/cubit/login_cubit.dart';
-import 'package:eshtri/modules/login/login_screen.dart';
+import 'package:eshtri/modules/categories/categories_tab.dart';
+import 'package:eshtri/modules/favorites/favorites_tab.dart';
+import 'package:eshtri/modules/home/home_tab.dart';
+import 'package:eshtri/modules/search/search_screen.dart';
+import 'package:eshtri/modules/settings/settings_tab.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeLayout extends StatefulWidget {
   const HomeLayout({Key? key}) : super(key: key);
@@ -11,19 +13,46 @@ class HomeLayout extends StatefulWidget {
 }
 
 class _HomeLayoutState extends State<HomeLayout> {
+  final _tabs = [
+    const HomeTab(),
+    const CategoriesTab(),
+    const FavoritesTab(),
+    const SettingsTab(),
+  ];
+  var _tabCurrentIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Center(
-        child: TextButton(
-          onPressed: () async {
-            await BlocProvider.of<LoginCubit>(context).logTheUserOut();
-            Navigator.of(context)
-                .pushReplacement(MaterialPageRoute(builder: (context) => const LoginScreen()));
-          },
-          child: const Text('Logout'),
-        ),
+      appBar: AppBar(
+        title: const Text('Eshtri'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushNamed(SearchScreen.routeName);
+              },
+              child: const Icon(Icons.search),
+            ),
+          )
+        ],
+      ),
+      body: _tabs[_tabCurrentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _tabCurrentIndex,
+        onTap: (index) {
+          setState(
+            () {
+              _tabCurrentIndex = index;
+            },
+          );
+        },
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.category), label: 'Categories'),
+          BottomNavigationBarItem(icon: Icon(Icons.favorite_rounded), label: 'Favorites'),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
+        ],
       ),
     );
   }
