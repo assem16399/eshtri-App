@@ -16,8 +16,6 @@ class HomeCubit extends Cubit<HomeStates> {
       homeModel = HomeModel.fromJson(response.data);
       if (homeModel!.status) {
         emit(HomeSuccessState());
-        print(homeModel!.data!.banners[0].id);
-        print(homeModel!.data!.products[0].name);
       } else {
         print('error in getting Data');
         emit(HomeFailState());
