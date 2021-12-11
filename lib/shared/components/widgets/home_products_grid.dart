@@ -13,7 +13,7 @@ class HomeProductsGrid extends StatelessWidget {
     return GridView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.only(right: 20, left: 20, bottom: 10, top: 16),
+      padding: const EdgeInsets.only(right: 20, left: 20, bottom: 10, top: 8),
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: deviceSize.width * 0.5,
           crossAxisSpacing: deviceSize.height * 0.01,

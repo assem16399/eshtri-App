@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:eshtri/models/login_model.dart';
 import 'package:eshtri/modules/login/cubit/login_states.dart';
+import 'package:eshtri/shared/components/constants/constants.dart';
 import 'package:eshtri/shared/components/toast.dart';
 import 'package:eshtri/shared/network/end_points.dart';
 import 'package:eshtri/shared/network/local/cache_helper.dart';
@@ -21,7 +22,8 @@ class LoginCubit extends Cubit<LoginStates> {
       if (_loginModel!.status) {
         toast(toastMsg: _loginModel!.message);
         emit(LoginSuccessState());
-        CacheHelper.setData(key: 'token', value: _loginModel!.data!.token);
+        userAccessToken = _loginModel!.data!.token;
+        CacheHelper.setData(key: 'token', value: userAccessToken);
       } else {
         toast(toastMsg: _loginModel!.message);
         emit(LoginFailState());

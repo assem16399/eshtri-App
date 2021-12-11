@@ -42,8 +42,6 @@ class ProductCardItem extends StatelessWidget {
                 ),
               ),
               footer: Container(
-                width: deviceSize.width * 0.4,
-                height: deviceSize.height * 0.08,
                 decoration: const BoxDecoration(
                   color: Colors.black54,
                   borderRadius: BorderRadius.only(

@@ -19,15 +19,18 @@ class CategoriesCubit extends Cubit<CategoriesStates> {
     emit(CategoriesLoadingState());
 
     try {
-      final response = await DioHelper.getRequest(path: kGetCategoriesEndpoint, lang: 'en');
+      final response = await DioHelper.getRequest(path: kGetCategoriesEndpoint);
 
       if (CategoriesModel.fromJson(response!.data).status) {
         _categoriesModel = CategoriesModel.fromJson(response.data);
         emit(CategoriesGetSuccessState());
       } else {
+        print('error');
         emit(CategoriesGetFailState());
       }
     } catch (error) {
+      print(error.toString());
+
       emit(CategoriesGetFailState());
     }
   }

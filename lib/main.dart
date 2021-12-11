@@ -1,4 +1,5 @@
 import 'package:eshtri/layout/home_layout.dart';
+import 'package:eshtri/modules/categories/cubit/categories_cubit.dart';
 import 'package:eshtri/modules/home/cubit/home_cubit.dart';
 import 'package:eshtri/modules/login/cubit/login_cubit.dart';
 import 'package:eshtri/modules/login/login_screen.dart';
@@ -65,7 +66,10 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => HomeCubit()..getHomeData(userAccessToken!),
-        )
+        ),
+        BlocProvider(
+          create: (context) => CategoriesCubit()..getCategories(),
+        ),
       ],
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (context, appState) {},

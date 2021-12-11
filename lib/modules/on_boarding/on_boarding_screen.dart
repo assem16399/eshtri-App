@@ -36,13 +36,13 @@ class OnBoardingScreen extends StatelessWidget {
         screenBody: 'On Boarding 3 Body'),
   ];
 
-  void skipOnBoarding(BuildContext context) async {
-    await CacheHelper.setData(key: 'boarded', value: true);
+  void skipOnBoarding(BuildContext context) {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) => const LoginScreen(),
       ),
     );
+    CacheHelper.setData(key: 'boarded', value: true);
   }
 
   @override

@@ -1,27 +1,27 @@
 class CategoriesModel {
   late final bool status;
-  late CategoriesData data;
+  late final CategoriesData? data;
   CategoriesModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
-    data = (json['data'] != null ? CategoriesData.fromJson(json['data']) : null)!;
+    data = json['data'] != null ? CategoriesData.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson({CategoriesModel? model}) {
     if (model != null) {
-      return {'status': model.status, 'data': model.data.toJson(model: model.data)};
+      return {'status': model.status, 'data': model.data!.toJson(model: model.data)};
     } else {
-      return {'status': status, 'data': data.toJson()};
+      return {'status': status, 'data': data!.toJson()};
     }
   }
 }
 
 class CategoriesData {
   late final int currentPage;
-  List<CategoryModel> categories = [];
+  final List<CategoryModel> categories = [];
 
   CategoriesData.fromJson(Map<String, dynamic> json) {
     currentPage = json['current_page'];
-    json['data'].map((category) => categories.add(CategoryModel.fromJson(json))).toList();
+    json['data'].map((category) => categories.add(CategoryModel.fromJson(category))).toList();
   }
 
   Map<String, dynamic> toJson({CategoriesData? model}) {
@@ -40,7 +40,7 @@ class CategoriesData {
 }
 
 class CategoryModel {
-  late final int id;
+  late final dynamic id;
   late final String name;
   late final String imageUrl;
 
