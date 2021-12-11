@@ -9,7 +9,7 @@ class DioHelper {
     ));
   }
 
-  static Future<Response> getRequest({
+  static Future<Response>? getRequest({
     required String path,
     Map<String, dynamic>? queryParameters,
     String lang = 'en',

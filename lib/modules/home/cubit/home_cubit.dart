@@ -7,14 +7,22 @@ import 'package:eshtri/shared/network/remote/dio_helper.dart';
 class HomeCubit extends Cubit<HomeStates> {
   HomeCubit() : super(HomeInitialState());
 
-  HomeModel? homeModel;
+  HomeModel? _homeModel;
+
+  HomeModel? get homeModel {
+    if (_homeModel != null) {
+      return HomeModel.fromJson(_homeModel!.toJson());
+    } else {
+      return null;
+    }
+  }
 
   void getHomeData(String token) async {
     emit(HomeLoadingState());
     try {
       final response = await DioHelper.getRequest(path: kHomeEndPoint, token: token);
-      homeModel = HomeModel.fromJson(response.data);
-      if (homeModel!.status) {
+      if (HomeModel.fromJson(response!.data).status) {
+        _homeModel = HomeModel.fromJson(response.data);
         emit(HomeSuccessState());
       } else {
         print('error in getting Data');
