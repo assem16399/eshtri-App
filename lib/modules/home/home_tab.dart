@@ -39,7 +39,6 @@ class HomePageContents extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    print('HomePageContents building...');
 
     return SingleChildScrollView(
       child: Column(

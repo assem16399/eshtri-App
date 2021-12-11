@@ -9,7 +9,6 @@ class HomeCategoriesList extends StatelessWidget {
   final CategoriesData data;
   @override
   Widget build(BuildContext context) {
-    print('HomeCategoriesList building...');
     final deviceSize = MediaQuery.of(context).size;
     return ListView.separated(
       separatorBuilder: (context, index) => SizedBox(
