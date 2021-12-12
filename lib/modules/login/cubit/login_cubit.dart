@@ -15,7 +15,7 @@ class LoginCubit extends Cubit<LoginStates> {
     emit(LoginLoadingState());
     try {
       final response = await DioHelper.postRequest(
-          path: kLoginEndPoint, data: {'email': email, 'password': password});
+          path: kLoginEndpoint, data: {'email': email, 'password': password});
 
       _loginModel = LoginModel.fromJson(response.data);
 

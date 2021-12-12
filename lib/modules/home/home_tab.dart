@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:eshtri/models/home_model.dart';
+import 'package:eshtri/models/single_product/single_product_model.dart';
 import 'package:eshtri/modules/categories/cubit/categories_cubit.dart';
 import 'package:eshtri/modules/categories/cubit/categories_states.dart';
 import 'package:eshtri/modules/home/cubit/home_cubit.dart';
@@ -18,14 +19,15 @@ class HomeTab extends StatelessWidget {
     return BlocConsumer<HomeCubit, HomeStates>(
       listener: (context, homeState) {},
       builder: (context, homeState) {
-        final homeDataModel = BlocProvider.of<HomeCubit>(context).homeModel;
-        if (homeDataModel == null) {
+        final homeData = BlocProvider.of<HomeCubit>(context);
+        if (homeData.products.isEmpty || homeData.banners.isEmpty) {
           return const Center(
             child: CircularProgressIndicator(),
           );
         } else {
           return HomePageContents(
-            data: homeDataModel.data!,
+            banners: homeData.banners,
+            products: homeData.products,
           );
         }
       },
@@ -34,8 +36,10 @@ class HomeTab extends StatelessWidget {
 }
 
 class HomePageContents extends StatelessWidget {
-  const HomePageContents({Key? key, required this.data}) : super(key: key);
-  final HomeData data;
+  const HomePageContents({Key? key, required this.products, required this.banners})
+      : super(key: key);
+  final List<SingleProductModel> products;
+  final List<BannerModel> banners;
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
@@ -48,7 +52,7 @@ class HomePageContents extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 15.0),
             child: CarouselSlider(
               items: [
-                ...data.banners
+                ...banners
                     .map(
                       (banner) => SizedBox(
                         width: deviceSize.width,
@@ -105,7 +109,7 @@ class HomePageContents extends StatelessWidget {
               title: 'New Products',
             ),
           ),
-          HomeProductsGrid(productData: data),
+          HomeProductsGrid(products: products),
         ],
       ),
     );

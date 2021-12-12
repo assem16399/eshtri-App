@@ -1,5 +1,7 @@
-const kLoginEndPoint = 'login';
+const kLoginEndpoint = 'login';
 
-const kHomeEndPoint = 'home';
+const kHomeEndpoint = 'home';
 
 const kGetCategoriesEndpoint = 'categories';
+
+const kSetFavoriteStatusEndpoint = 'favorites';

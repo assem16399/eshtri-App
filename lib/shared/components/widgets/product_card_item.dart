@@ -1,21 +1,21 @@
+import 'package:eshtri/models/single_product/single_product_model.dart';
+import 'package:eshtri/models/single_product/single_product_model_states.dart';
+import 'package:eshtri/modules/home/cubit/home_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductCardItem extends StatelessWidget {
   const ProductCardItem({
     Key? key,
-    required this.imageUrl,
-    required this.title,
-    required this.discount,
-    required this.price,
-    required this.priceAfterDiscount,
+    required this.id,
   }) : super(key: key);
-  final String imageUrl;
-  final String title;
-  final int discount;
-  final dynamic price;
-  final dynamic priceAfterDiscount;
+
+  final int id;
+
   @override
   Widget build(BuildContext context) {
+    final product = BlocProvider.of<HomeCubit>(context).findProductById(id);
+
     final deviceSize = MediaQuery.of(context).size;
     return InkWell(
       onTap: () {},
@@ -37,7 +37,7 @@ class ProductCardItem extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Image.network(
-                    imageUrl,
+                    product.imageUrl,
                   ),
                 ),
               ),
@@ -55,7 +55,7 @@ class ProductCardItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        title,
+                        product.name,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         softWrap: true,
@@ -65,16 +65,16 @@ class ProductCardItem extends StatelessWidget {
                             height: 1.1,
                             fontWeight: FontWeight.bold),
                       ),
-                      if (discount == 0)
+                      if (product.discount == 0)
                         Text(
-                          '$priceAfterDiscount EGP',
+                          '${product.price} EGP',
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
-                      if (discount > 0)
+                      if (product.discount > 0)
                         Row(
                           children: [
                             Text(
-                              price.toString(),
+                              product.oldPrice.toString(),
                               style: const TextStyle(
                                 decorationStyle: TextDecorationStyle.solid,
                                 decoration: TextDecoration.lineThrough,
@@ -84,7 +84,7 @@ class ProductCardItem extends StatelessWidget {
                               width: deviceSize.width * 0.01,
                             ),
                             Text(
-                              '$priceAfterDiscount EGP',
+                              '${product.price} EGP',
                               style: const TextStyle(fontWeight: FontWeight.bold),
                             )
                           ],
@@ -95,7 +95,7 @@ class ProductCardItem extends StatelessWidget {
               ),
             ),
           ),
-          if (discount > 0)
+          if (product.discount > 0)
             Positioned(
               right: -10,
               top: -15,
@@ -106,7 +106,7 @@ class ProductCardItem extends StatelessWidget {
                 child: CircleAvatar(
                   radius: 25,
                   backgroundColor: Colors.transparent,
-                  child: Text('$discount %'),
+                  child: Text('${product.discount} %'),
                 ),
               ),
             ),
@@ -114,11 +114,19 @@ class ProductCardItem extends StatelessWidget {
             top: deviceSize.height * 0.01,
             left: deviceSize.width * 0.03,
             child: GestureDetector(
-              onTap: () {},
-              child: const Icon(
-                Icons.favorite_border_outlined,
-                size: 30,
-                color: Colors.deepOrange,
+              onTap: () {
+                BlocProvider.of<SingleProductModel>(context).toggleFavoriteStates();
+                print(product.inFavorites);
+              },
+              child: BlocConsumer<SingleProductModel, SingleProductModelStates>(
+                listener: (context, singleProductState) {},
+                builder: (context, singleProductState) => Icon(
+                  BlocProvider.of<SingleProductModel>(context).inFavorites
+                      ? Icons.favorite_outlined
+                      : Icons.favorite_border_outlined,
+                  size: 30,
+                  color: Colors.deepOrange,
+                ),
               ),
             ),
           )
