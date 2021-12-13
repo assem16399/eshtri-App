@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'modules/on_boarding/on_boarding_screen.dart';
+import 'modules/profile_and_more/cubit/profile_cubit.dart';
 import 'shared/components/constants/bloc_observer.dart';
 import 'shared/network/local/cache_helper.dart';
 import 'shared/network/remote/dio_helper.dart';
@@ -69,6 +70,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => CategoriesCubit()..getCategories(),
+        ),
+        BlocProvider(
+          create: (context) => ProfileCubit()..getProfileData(),
         ),
       ],
       child: BlocConsumer<AppCubit, AppStates>(

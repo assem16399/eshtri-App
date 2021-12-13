@@ -10,6 +10,10 @@ class HomeModel {
     status = json['status'];
     data = json['data'] != null ? HomeData.fromJson(json['data']) : null;
   }
+  HomeModel.copy(HomeModel model) {
+    status = model.status;
+    data = HomeData.copy(model.data!);
+  }
 }
 
 class HomeData {
@@ -22,6 +26,14 @@ class HomeData {
     json['products'].forEach((product) {
       products.add(SingleProductModel().fromJson(product));
     });
+  }
+  HomeData.copy(HomeData model) {
+    for (var banner in model.banners) {
+      banners.add(BannerModel.copy(banner));
+    }
+    for (var product in model.products) {
+      products.add(product.copy());
+    }
   }
 }
 
@@ -36,5 +48,11 @@ class BannerModel {
     imageUrl = json['image'];
     category = json['category'];
     product = json['product'];
+  }
+  BannerModel.copy(BannerModel model) {
+    id = model.id;
+    imageUrl = model.imageUrl;
+    category = model.category;
+    product = model.product;
   }
 }

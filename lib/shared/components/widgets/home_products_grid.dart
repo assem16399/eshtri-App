@@ -10,7 +10,6 @@ class HomeProductsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('building');
     final deviceSize = MediaQuery.of(context).size;
     return GridView.builder(
       itemCount: products.length,

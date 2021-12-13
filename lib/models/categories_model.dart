@@ -6,12 +6,9 @@ class CategoriesModel {
     data = json['data'] != null ? CategoriesData.fromJson(json['data']) : null;
   }
 
-  Map<String, dynamic> toJson({CategoriesModel? model}) {
-    if (model != null) {
-      return {'status': model.status, 'data': model.data!.toJson(model: model.data)};
-    } else {
-      return {'status': status, 'data': data!.toJson()};
-    }
+  CategoriesModel.copy(CategoriesModel model) {
+    status = model.status;
+    data = CategoriesData.copy(model.data!);
   }
 }
 
@@ -21,20 +18,12 @@ class CategoriesData {
 
   CategoriesData.fromJson(Map<String, dynamic> json) {
     currentPage = json['current_page'];
-    json['data'].map((category) => categories.add(CategoryModel.fromJson(category))).toList();
+    json['data'].forEach((category) => categories.add(CategoryModel.fromJson(category)));
   }
-
-  Map<String, dynamic> toJson({CategoriesData? model}) {
-    if (model != null) {
-      return {
-        'current_page': model.currentPage,
-        'data': model.categories.map((category) => category.toJson(model: category)).toList()
-      };
-    } else {
-      return {
-        'current_page': currentPage,
-        'data': categories.map((category) => category.toJson()).toList()
-      };
+  CategoriesData.copy(CategoriesData model) {
+    currentPage = model.currentPage;
+    for (var category in model.categories) {
+      categories.add(CategoryModel.copy(category));
     }
   }
 }
@@ -50,19 +39,9 @@ class CategoryModel {
     imageUrl = json['image'];
   }
 
-  Map<String, dynamic> toJson({CategoryModel? model}) {
-    if (model != null) {
-      return {
-        'id': model.id,
-        'name': model.name,
-        'image': model.imageUrl,
-      };
-    } else {
-      return {
-        'id': id,
-        'name': name,
-        'image': imageUrl,
-      };
-    }
+  CategoryModel.copy(CategoryModel model) {
+    id = model.id;
+    name = model.name;
+    imageUrl = model.imageUrl;
   }
 }

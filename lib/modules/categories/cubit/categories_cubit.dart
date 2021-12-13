@@ -10,7 +10,7 @@ class CategoriesCubit extends Cubit<CategoriesStates> {
   CategoriesModel? _categoriesModel;
   CategoriesModel? get categoriesModel {
     if (_categoriesModel != null) {
-      return CategoriesModel.fromJson(_categoriesModel!.toJson());
+      return CategoriesModel.copy(_categoriesModel!);
     }
     return null;
   }

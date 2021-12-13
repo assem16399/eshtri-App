@@ -33,7 +33,11 @@ class SingleProductModel extends Cubit<SingleProductModelStates> {
     return this;
   }
 
-  void toggleFavoriteStates() async {
+  SingleProductModel copy() {
+    return this;
+  }
+
+  Future<void> toggleFavoriteStates() async {
     inFavorites = !inFavorites;
     emit(SingleProductModelChangeFavoriteState());
     try {

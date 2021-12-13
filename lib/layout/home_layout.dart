@@ -2,7 +2,7 @@ import 'package:eshtri/modules/categories/categories_tab.dart';
 import 'package:eshtri/modules/favorites/favorites_tab.dart';
 import 'package:eshtri/modules/home/home_tab.dart';
 import 'package:eshtri/modules/search/search_screen.dart';
-import 'package:eshtri/modules/settings/settings_tab.dart';
+import 'package:eshtri/modules/profile_and_more/profile_and_more_tab.dart';
 import 'package:flutter/material.dart';
 
 class HomeLayout extends StatefulWidget {
@@ -17,7 +17,7 @@ class _HomeLayoutState extends State<HomeLayout> {
     const HomeTab(),
     const CategoriesTab(),
     const FavoritesTab(),
-    const SettingsTab(),
+    const ProfileAndMoreTab(),
   ];
   var _tabCurrentIndex = 0;
   @override
@@ -51,7 +51,7 @@ class _HomeLayoutState extends State<HomeLayout> {
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.category), label: 'Categories'),
           BottomNavigationBarItem(icon: Icon(Icons.favorite_rounded), label: 'Favorites'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
+          BottomNavigationBarItem(icon: Icon(Icons.face_rounded), label: 'Profile & More'),
         ],
       ),
     );

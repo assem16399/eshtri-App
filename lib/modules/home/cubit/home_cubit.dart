@@ -8,21 +8,23 @@ import 'package:eshtri/shared/network/remote/dio_helper.dart';
 class HomeCubit extends Cubit<HomeStates> {
   HomeCubit() : super(HomeInitialState());
 
-  late HomeModel? _homeModel;
+  HomeModel? _homeModel;
+  HomeModel? get homeModel {
+    if (_homeModel == null) return null;
+    return HomeModel.copy(_homeModel!);
+  }
 
-  final List<SingleProductModel> _products = [];
-  final List<BannerModel> _banners = [];
-
-  List<SingleProductModel> get products {
-    return [..._products];
+  List<SingleProductModel> get favProducts {
+    if (_homeModel == null) return [];
+    return _homeModel!.data!.products.where((element) => element.inFavorites == true).toList();
   }
 
   SingleProductModel findProductById(int id) {
-    return _products.firstWhere((element) => element.id == id);
+    return _homeModel!.data!.products.firstWhere((element) => element.id == id);
   }
 
-  List<BannerModel> get banners {
-    return [..._banners];
+  void refreshFavoriteList() {
+    emit(ChangeProductFavoriteStatus());
   }
 
   void getHomeData(String token) async {
@@ -31,14 +33,7 @@ class HomeCubit extends Cubit<HomeStates> {
       final response = await DioHelper.getRequest(path: kHomeEndpoint, token: token);
       if (HomeModel.fromJson(response!.data).status) {
         _homeModel = HomeModel.fromJson(response.data);
-        for (var element in _homeModel!.data!.products) {
-          _products.add(element);
-        }
-        for (var element in _homeModel!.data!.banners) {
-          _banners.add(element);
-        }
 
-        _homeModel = null;
         emit(HomeSuccessState());
       } else {
         print('error in getting Data');

@@ -1,11 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:eshtri/models/home_model.dart';
 import 'package:eshtri/models/single_product/single_product_model.dart';
-import 'package:eshtri/modules/categories/cubit/categories_cubit.dart';
-import 'package:eshtri/modules/categories/cubit/categories_states.dart';
+
 import 'package:eshtri/modules/home/cubit/home_cubit.dart';
 import 'package:eshtri/modules/home/cubit/home_states.dart';
-import 'package:eshtri/shared/components/widgets/home_categories_list.dart';
 import 'package:eshtri/shared/components/widgets/home_products_grid.dart';
 import 'package:eshtri/shared/components/widgets/home_section_title_text.dart';
 import 'package:flutter/material.dart';
@@ -19,15 +17,15 @@ class HomeTab extends StatelessWidget {
     return BlocConsumer<HomeCubit, HomeStates>(
       listener: (context, homeState) {},
       builder: (context, homeState) {
-        final homeData = BlocProvider.of<HomeCubit>(context);
-        if (homeData.products.isEmpty || homeData.banners.isEmpty) {
+        final homeModel = BlocProvider.of<HomeCubit>(context).homeModel;
+        if (homeModel == null) {
           return const Center(
             child: CircularProgressIndicator(),
           );
         } else {
           return HomePageContents(
-            banners: homeData.banners,
-            products: homeData.products,
+            banners: homeModel.data!.banners,
+            products: homeModel.data!.products,
           );
         }
       },
@@ -56,7 +54,7 @@ class HomePageContents extends StatelessWidget {
                     .map(
                       (banner) => SizedBox(
                         width: deviceSize.width,
-                        height: deviceSize.height * 0.2,
+                        height: deviceSize.height * 0.25,
                         child: Image.network(
                           banner.imageUrl,
                           fit: BoxFit.cover,
@@ -67,7 +65,7 @@ class HomePageContents extends StatelessWidget {
                     .toList()
               ],
               options: CarouselOptions(
-                  height: deviceSize.height * 0.2,
+                  height: deviceSize.height * 0.25,
                   initialPage: 0,
                   autoPlay: true,
                   autoPlayInterval: const Duration(seconds: 3),
@@ -76,33 +74,33 @@ class HomePageContents extends StatelessWidget {
                   viewportFraction: 1),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: HomeSectionTitleText(
-              title: 'Categories',
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 15, top: 15, left: 20, right: 20),
-            child: SizedBox(
-              width: double.infinity,
-              height: deviceSize.height * 0.125,
-              child: BlocConsumer<CategoriesCubit, CategoriesStates>(
-                  listener: (context, categoryState) {},
-                  builder: (context, categoryState) {
-                    final categoriesModel =
-                        BlocProvider.of<CategoriesCubit>(context).categoriesModel;
-                    if (categoriesModel != null) {
-                      return HomeCategoriesList(
-                        data: categoriesModel.data!,
-                      );
-                    }
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }),
-            ),
-          ),
+          // const Padding(
+          //   padding: EdgeInsets.symmetric(horizontal: 20),
+          //   child: HomeSectionTitleText(
+          //     title: 'Categories',
+          //   ),
+          // ),
+          // Padding(
+          //   padding: const EdgeInsets.only(bottom: 15, top: 15, left: 20, right: 20),
+          //   child: SizedBox(
+          //     width: double.infinity,
+          //     height: deviceSize.height * 0.125,
+          //     child: BlocConsumer<CategoriesCubit, CategoriesStates>(
+          //         listener: (context, categoryState) {},
+          //         builder: (context, categoryState) {
+          //           final categoriesModel =
+          //               BlocProvider.of<CategoriesCubit>(context).categoriesModel;
+          //           if (categoriesModel != null) {
+          //             return HomeCategoriesList(
+          //               data: categoriesModel.data!,
+          //             );
+          //           }
+          //           return const Center(
+          //             child: CircularProgressIndicator(),
+          //           );
+          //         }),
+          //   ),
+          // ),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: HomeSectionTitleText(

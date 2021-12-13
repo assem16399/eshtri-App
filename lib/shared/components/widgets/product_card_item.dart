@@ -116,7 +116,6 @@ class ProductCardItem extends StatelessWidget {
             child: GestureDetector(
               onTap: () {
                 BlocProvider.of<SingleProductModel>(context).toggleFavoriteStates();
-                print(product.inFavorites);
               },
               child: BlocConsumer<SingleProductModel, SingleProductModelStates>(
                 listener: (context, singleProductState) {},
