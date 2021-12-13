@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class DefaultTextField extends StatelessWidget {
+  final String? initialValue;
+  final bool enabled;
   final TextEditingController? controller;
   final bool isVisible;
   final String label;
@@ -14,6 +16,8 @@ class DefaultTextField extends StatelessWidget {
   final void Function()? onTap;
   DefaultTextField(
       {Key? key,
+      this.initialValue,
+      this.enabled = true,
       this.controller,
       required this.label,
       required this.preIcon,
@@ -32,12 +36,15 @@ class DefaultTextField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: TextFormField(
+        enabled: enabled,
+        initialValue: initialValue,
         onFieldSubmitted: onSubmit,
         controller: controller,
         onTap: onTap,
         keyboardType: type,
         obscureText: isVisible ? false : true,
         decoration: InputDecoration(
+          disabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
           label: Text(
             label,

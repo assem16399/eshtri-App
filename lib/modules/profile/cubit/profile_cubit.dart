@@ -1,9 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:eshtri/models/login_model.dart';
-import 'package:eshtri/modules/profile_and_more/cubit/profile_states.dart';
 import 'package:eshtri/shared/components/constants/constants.dart';
 import 'package:eshtri/shared/network/end_points.dart';
 import 'package:eshtri/shared/network/remote/dio_helper.dart';
+
+import 'profile_states.dart';
 
 class ProfileCubit extends Cubit<ProfileStates> {
   ProfileCubit() : super(ProfileInitialState());

@@ -1,9 +1,11 @@
 import 'package:eshtri/layout/home_layout.dart';
+import 'package:eshtri/modules/about_us/about_us_screen.dart';
 import 'package:eshtri/modules/categories/cubit/categories_cubit.dart';
 import 'package:eshtri/modules/home/cubit/home_cubit.dart';
 import 'package:eshtri/modules/login/cubit/login_cubit.dart';
 import 'package:eshtri/modules/login/login_screen.dart';
 import 'package:eshtri/modules/search/search_screen.dart';
+import 'package:eshtri/modules/settings/settings.dart';
 import 'package:eshtri/shared/components/constants/constants.dart';
 import 'package:eshtri/shared/cubit/app_cubit.dart';
 import 'package:eshtri/shared/cubit/app_states.dart';
@@ -12,7 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'modules/on_boarding/on_boarding_screen.dart';
-import 'modules/profile_and_more/cubit/profile_cubit.dart';
+import 'modules/profile/cubit/profile_cubit.dart';
+import 'modules/profile/profile_screen.dart';
 import 'shared/components/constants/bloc_observer.dart';
 import 'shared/network/local/cache_helper.dart';
 import 'shared/network/remote/dio_helper.dart';
@@ -84,7 +87,12 @@ class MyApp extends StatelessWidget {
             themeMode: BlocProvider.of<AppCubit>(context).isDark ? ThemeMode.dark : ThemeMode.light,
             title: 'Flutter Demo',
             home: homeScreen,
-            routes: {SearchScreen.routeName: (context) => const SearchScreen()},
+            routes: {
+              SearchScreen.routeName: (context) => const SearchScreen(),
+              ProfileScreen.routeName: (context) => const ProfileScreen(),
+              SettingsScreen.routeName: (context) => const SettingsScreen(),
+              AboutUsScreen.routeName: (context) => const AboutUsScreen(),
+            },
           );
         },
       ),
