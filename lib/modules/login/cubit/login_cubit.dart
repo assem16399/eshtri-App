@@ -34,6 +34,8 @@ class LoginCubit extends Cubit<LoginStates> {
   }
 
   Future<void> logTheUserOut() async {
+    _loginModel = null;
+    userAccessToken = null;
     await CacheHelper.clear('token');
 
     emit(LoginKillTokenState());

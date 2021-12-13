@@ -1,7 +1,10 @@
 import 'package:eshtri/modules/about_us/about_us_screen.dart';
+import 'package:eshtri/modules/login/cubit/login_cubit.dart';
+import 'package:eshtri/modules/login/login_screen.dart';
 import 'package:eshtri/modules/profile/profile_screen.dart';
 import 'package:eshtri/modules/settings/settings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfileAndMoreTab extends StatelessWidget {
   const ProfileAndMoreTab({Key? key}) : super(key: key);
@@ -53,6 +56,24 @@ class ProfileAndMoreTab extends StatelessWidget {
                 leading: const Icon(Icons.info),
                 title: Text(
                   'About Us',
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                trailing: const Icon(Icons.navigate_next_outlined),
+              ),
+            ),
+            const Divider(
+              thickness: 2,
+            ),
+            InkWell(
+              onTap: () async {
+                await BlocProvider.of<LoginCubit>(context).logTheUserOut();
+                Navigator.pushReplacement(
+                    context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+              },
+              child: ListTile(
+                leading: const Icon(Icons.logout_outlined),
+                title: Text(
+                  'LOGOUT',
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
                 trailing: const Icon(Icons.navigate_next_outlined),
