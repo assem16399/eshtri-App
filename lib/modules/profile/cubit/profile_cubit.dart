@@ -17,21 +17,42 @@ class ProfileCubit extends Cubit<ProfileStates> {
     return AuthModel.copy(_profileModel!);
   }
 
-  void getProfileData() async {
-    emit(ProfileDataLoadingState());
-    try {
-      final response =
-          await DioHelper.getRequest(path: kGetProfileDataEndpoint, token: userAccessToken);
-      if (AuthModel.fromJson(response!.data).status) {
-        _profileModel = AuthModel.fromJson(response.data);
-
-        emit(ProfileGetDataSuccessState());
-      } else {
+  String? tempToken;
+  Future<void> getProfileData([bool forceRefresh = false]) async {
+    if (tempToken == null || forceRefresh == true) {
+      emit(ProfileDataLoadingState());
+      try {
+        final response =
+            await DioHelper.getRequest(path: kGetProfileDataEndpoint, token: userAccessToken);
+        if (AuthModel.fromJson(response!.data).status) {
+          _profileModel = AuthModel.fromJson(response.data);
+          tempToken = userAccessToken;
+          emit(ProfileGetDataSuccessState());
+        } else {
+          emit(ProfileGetDataFailState());
+        }
+      } catch (error) {
+        print(error.toString());
         emit(ProfileGetDataFailState());
       }
-    } catch (error) {
-      print(error.toString());
-      emit(ProfileGetDataFailState());
+    } else {
+      if (tempToken != userAccessToken) {
+        emit(ProfileDataLoadingState());
+        try {
+          final response =
+              await DioHelper.getRequest(path: kGetProfileDataEndpoint, token: userAccessToken);
+          if (AuthModel.fromJson(response!.data).status) {
+            _profileModel = AuthModel.fromJson(response.data);
+            tempToken = userAccessToken;
+            emit(ProfileGetDataSuccessState());
+          } else {
+            emit(ProfileGetDataFailState());
+          }
+        } catch (error) {
+          print(error.toString());
+          emit(ProfileGetDataFailState());
+        }
+      }
     }
   }
 

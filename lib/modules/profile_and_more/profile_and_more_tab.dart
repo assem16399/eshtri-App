@@ -68,8 +68,7 @@ class ProfileAndMoreTab extends StatelessWidget {
               onTap: () async {
                 try {
                   await BlocProvider.of<AuthCubit>(context).logTheUserOut();
-                  Navigator.pushReplacement(
-                      context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+                  Navigator.of(context).pushReplacementNamed('/');
                 } catch (_) {}
               },
               child: ListTile(

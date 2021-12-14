@@ -11,6 +11,34 @@ class AuthCubit extends Cubit<AuthStates> {
   AuthCubit() : super(AuthInitialState());
 
   AuthModel? _authModel;
+
+  bool get hasToken {
+    if (_authModel != null) {
+      if (_authModel!.data != null) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    return false;
+  }
+
+  bool tryAutoLogin() {
+    if (CacheHelper.containsKey('token')) {
+      _authModel = AuthModel(
+        status: true,
+        message: 'success',
+        data: UserData(
+          token: CacheHelper.getData(key: 'token'),
+        ),
+      );
+      emit(AuthSuccessState());
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   void logUserIn(String email, String password) async {
     emit(AuthLoadingState());
     try {
@@ -22,6 +50,7 @@ class AuthCubit extends Cubit<AuthStates> {
       if (_authModel!.status) {
         toast(toastMsg: _authModel!.message);
         emit(AuthSuccessState());
+
         userAccessToken = _authModel!.data!.token;
         CacheHelper.setData(key: 'token', value: userAccessToken);
       } else {

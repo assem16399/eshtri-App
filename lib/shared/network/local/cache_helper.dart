@@ -27,6 +27,10 @@ class CacheHelper {
     return await sharedPreferences!.remove(key);
   }
 
+  static bool containsKey(String key) {
+    return sharedPreferences!.containsKey(key);
+  }
+
   // If you want to use it instead of setData, but you will have to send the value im a map
   // static Future<bool> setData2({required String key, required Map<String,dynamic> value}) async {
   //   return await sharedPreferences!.setString(key, jsonEncode(value));

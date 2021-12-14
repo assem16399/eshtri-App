@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:eshtri/models/home_model.dart';
 import 'package:eshtri/models/single_product/single_product_model.dart';
 import 'package:eshtri/modules/home/cubit/home_states.dart';
+import 'package:eshtri/shared/components/constants/constants.dart';
 import 'package:eshtri/shared/network/end_points.dart';
 import 'package:eshtri/shared/network/remote/dio_helper.dart';
 
@@ -27,21 +28,45 @@ class HomeCubit extends Cubit<HomeStates> {
     emit(ChangeProductFavoriteStatus());
   }
 
-  void getHomeData(String token) async {
-    emit(HomeLoadingState());
-    try {
-      final response = await DioHelper.getRequest(path: kHomeEndpoint, token: token);
-      if (HomeModel.fromJson(response!.data).status) {
-        _homeModel = HomeModel.fromJson(response.data);
+  String? tempToken;
 
-        emit(HomeSuccessState());
-      } else {
-        print('error in getting Data');
+  Future<void> getHomeData([bool forceRefresh = false]) async {
+    if (tempToken == null || forceRefresh == true) {
+      emit(HomeLoadingState());
+      try {
+        final response = await DioHelper.getRequest(path: kHomeEndpoint, token: userAccessToken);
+        if (HomeModel.fromJson(response!.data).status) {
+          _homeModel = HomeModel.fromJson(response.data);
+          tempToken = userAccessToken;
+
+          emit(HomeSuccessState());
+        } else {
+          print('error in getting Data');
+          emit(HomeFailState());
+        }
+      } catch (error) {
+        print(error.toString());
         emit(HomeFailState());
       }
-    } catch (error) {
-      print(error.toString());
-      emit(HomeFailState());
+    } else {
+      if (tempToken != userAccessToken) {
+        emit(HomeLoadingState());
+        try {
+          final response = await DioHelper.getRequest(path: kHomeEndpoint, token: userAccessToken);
+          if (HomeModel.fromJson(response!.data).status) {
+            _homeModel = HomeModel.fromJson(response.data);
+            tempToken = userAccessToken;
+
+            emit(HomeSuccessState());
+          } else {
+            print('error in getting Data');
+            emit(HomeFailState());
+          }
+        } catch (error) {
+          print(error.toString());
+          emit(HomeFailState());
+        }
+      }
     }
   }
 }

@@ -29,20 +29,20 @@ class AuthModel {
 
 class UserData {
   late final int? id;
-  late final String name;
-  late final String email;
-  late final String phone;
-  late final String image;
+  late final String? name;
+  late final String? email;
+  late final String? phone;
+  late final String? image;
   late final int? points;
   late final int? credit;
   late final String? token;
 
   UserData(
-      {required this.id,
-      required this.name,
-      required this.email,
-      required this.phone,
-      required this.image,
+      {this.id,
+      this.name,
+      this.email,
+      this.phone,
+      this.image,
       this.points,
       this.credit,
       this.token});

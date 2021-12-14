@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'modules/auth/cubit/auth_cubit.dart';
+import 'modules/auth/cubit/auth_states.dart';
 import 'modules/on_boarding/on_boarding_screen.dart';
 import 'modules/profile/cubit/profile_cubit.dart';
 import 'modules/profile/profile_screen.dart';
@@ -29,22 +30,11 @@ void main() async {
   final mode = CacheHelper.getData(key: 'themeMode');
   final boarded = CacheHelper.getData(key: 'boarded');
   userAccessToken = CacheHelper.getData(key: 'token');
-  Widget homeScreen() {
-    if (boarded != null && boarded != false) {
-      if (userAccessToken != null) {
-        return const HomeLayout();
-      } else {
-        return const LoginScreen();
-      }
-    } else {
-      return OnBoardingScreen();
-    }
-  }
 
   BlocOverrides.runZoned(
     () {
       runApp(MyApp(
-        homeScreen: homeScreen(),
+        boarded: boarded ?? false,
         sharedPrefIsDark: mode,
       ));
     },
@@ -54,8 +44,12 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final bool? sharedPrefIsDark;
-  final Widget homeScreen;
-  const MyApp({Key? key, this.sharedPrefIsDark, required this.homeScreen}) : super(key: key);
+  final bool boarded;
+  const MyApp({
+    Key? key,
+    this.sharedPrefIsDark,
+    required this.boarded,
+  }) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -66,33 +60,43 @@ class MyApp extends StatelessWidget {
           create: (context) => AppCubit()..toggleThemeMode(sharedPrefIsDark),
         ),
         BlocProvider(
-          create: (context) =>AuthCubit(),
+          create: (context) => AuthCubit(),
         ),
         BlocProvider(
-          create: (context) => HomeCubit()..getHomeData(userAccessToken!),
+          create: (context) => HomeCubit(),
         ),
         BlocProvider(
-          create: (context) => CategoriesCubit()..getCategories(),
+          create: (context) => CategoriesCubit(),
         ),
         BlocProvider(
-          create: (context) => ProfileCubit()..getProfileData(),
+          create: (context) => ProfileCubit(),
         ),
       ],
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (context, appState) {},
         builder: (context, appState) {
-          return MaterialApp(
-            theme: lightTheme,
-            darkTheme: darkTheme,
-            themeMode: BlocProvider.of<AppCubit>(context).isDark ? ThemeMode.dark : ThemeMode.light,
-            title: 'Flutter Demo',
-            home: homeScreen,
-            routes: {
-              SearchScreen.routeName: (context) => const SearchScreen(),
-              ProfileScreen.routeName: (context) => const ProfileScreen(),
-              SettingsScreen.routeName: (context) => const SettingsScreen(),
-              AboutUsScreen.routeName: (context) => const AboutUsScreen(),
-            },
+          return BlocConsumer<AuthCubit, AuthStates>(
+            listener: (context, appState) {},
+            builder: (context, appState) => MaterialApp(
+              theme: lightTheme,
+              darkTheme: darkTheme,
+              themeMode:
+                  BlocProvider.of<AppCubit>(context).isDark ? ThemeMode.dark : ThemeMode.light,
+              title: 'Flutter Demo',
+              home: boarded
+                  ? BlocProvider.of<AuthCubit>(context).hasToken
+                      ? const HomeLayout()
+                      : BlocProvider.of<AuthCubit>(context).tryAutoLogin()
+                          ? const HomeLayout()
+                          : LoginScreen()
+                  : OnBoardingScreen(),
+              routes: {
+                SearchScreen.routeName: (context) => const SearchScreen(),
+                ProfileScreen.routeName: (context) => const ProfileScreen(),
+                SettingsScreen.routeName: (context) => const SettingsScreen(),
+                AboutUsScreen.routeName: (context) => const AboutUsScreen(),
+              },
+            ),
           );
         },
       ),

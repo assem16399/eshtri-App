@@ -16,7 +16,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final formKey = GlobalKey<FormState>();
   var _enabled = false;
-  var _isLoading = false;
+  bool? _isLoading = false;
 
   UserData? updatedUserData = UserData(
     id: null,
@@ -51,7 +51,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   @override
-  @override
+  void initState() {
+    // TODO: implement initState
+    _isLoading = true;
+    BlocProvider.of<ProfileCubit>(context).getProfileData().then((_) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }).catchError((_) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final profileModel = BlocProvider.of<ProfileCubit>(context, listen: true).profileModel;
@@ -60,7 +78,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         title: const Text('Your Profile'),
       ),
-      body: profileModel == null
+      body: _isLoading!
           ? const Center(
               child: CircularProgressIndicator(),
             )
@@ -76,7 +94,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         DefaultTextField(
                           enabled: _enabled,
-                          initialValue: profileModel.data!.name,
+                          initialValue: profileModel!.data!.name,
                           type: TextInputType.name,
                           label: 'Your Name',
                           preIcon: Icons.face_rounded,
@@ -126,7 +144,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             updatedUserData = updatedUserData!.copyWith(phone: value);
                           },
                         ),
-                        _isLoading
+                        _isLoading!
                             ? const Center(
                                 child: CircularProgressIndicator(),
                               )
