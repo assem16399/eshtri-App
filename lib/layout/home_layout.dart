@@ -3,6 +3,7 @@ import 'package:eshtri/modules/favorites/favorites_tab.dart';
 import 'package:eshtri/modules/home/home_tab.dart';
 import 'package:eshtri/modules/search/search_screen.dart';
 import 'package:eshtri/modules/profile_and_more/profile_and_more_tab.dart';
+import 'package:eshtri/shared/components/widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
 
 class HomeLayout extends StatefulWidget {
@@ -23,6 +24,7 @@ class _HomeLayoutState extends State<HomeLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const AppDrawer(),
       appBar: AppBar(
         title: const Text('Eshtri'),
         actions: [
