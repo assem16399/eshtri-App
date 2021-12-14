@@ -62,7 +62,7 @@ class AuthCubit extends Cubit<AuthStates> {
     }
   }
 
-  void registerTheUser(
+  Future<void> registerTheUser(
       {required String email,
       required String password,
       required String phone,
@@ -80,8 +80,8 @@ class AuthCubit extends Cubit<AuthStates> {
         userAccessToken = _authModel!.data!.token;
         CacheHelper.setData(key: 'token', value: userAccessToken);
       } else {
-        toast(toastMsg: _authModel!.message);
         emit(AuthFailState());
+        throw _authModel!.message!;
       }
     } catch (error) {
       emit(AuthFailState());

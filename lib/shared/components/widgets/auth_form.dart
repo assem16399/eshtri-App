@@ -4,6 +4,7 @@ import 'package:eshtri/modules/auth/cubit/auth_cubit.dart';
 import 'package:eshtri/modules/auth/cubit/auth_states.dart';
 
 import 'package:eshtri/modules/auth/register/register_screen.dart';
+import 'package:eshtri/shared/components/toast.dart';
 
 import 'package:eshtri/shared/styles/colors.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class _AuthFormState extends State<AuthForm> {
   var _isPasswordVisible = false;
   final formKey = GlobalKey<FormState>();
 
-  void submitAuthForm() {
+  void submitAuthForm() async {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
       if (widget.currentAuthMode == AuthMode.login) {
@@ -37,11 +38,16 @@ class _AuthFormState extends State<AuthForm> {
             .logUserIn(authData['email']!, authData['password']!);
       } else {
         // TODO Register the user here...
-        BlocProvider.of<AuthCubit>(context, listen: false).registerTheUser(
-            email: authData['email']!,
-            password: authData['password']!,
-            name: authData['name']!,
-            phone: authData['phone']!);
+        try {
+          await BlocProvider.of<AuthCubit>(context, listen: false).registerTheUser(
+              email: authData['email']!,
+              password: authData['password']!,
+              name: authData['name']!,
+              phone: authData['phone']!);
+          Navigator.of(context).pop();
+        } catch (error) {
+          toast(toastMsg: error.toString());
+        }
       }
     }
   }
