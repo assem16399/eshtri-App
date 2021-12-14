@@ -1,9 +1,10 @@
-import 'package:eshtri/shared/components/widgets/login_form.dart';
+import 'package:eshtri/modules/auth/auth_mode_enum.dart';
+import 'package:eshtri/shared/components/widgets/auth_form.dart';
 import 'package:eshtri/shared/styles/colors.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class RegisterScreen extends StatelessWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class LoginScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Login',
+                  'Register',
                   style:
                       Theme.of(context).textTheme.headline4!.copyWith(color: kPrimarySwatchColor),
                 ),
@@ -26,12 +27,14 @@ class LoginScreen extends StatelessWidget {
                   height: deviceSize.height * 0.01,
                 ),
                 Text(
-                  'Login now to browse our products',
+                  'Register now to get the best shopping experience',
                   style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.black),
                 ),
                 const Padding(
                   padding: EdgeInsets.only(top: 16.0),
-                  child: LoginForm(),
+                  child: AuthForm(
+                    currentAuthMode: AuthMode.register,
+                  ),
                 )
               ],
             ),

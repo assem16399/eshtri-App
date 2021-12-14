@@ -9,11 +9,11 @@ import 'profile_states.dart';
 class ProfileCubit extends Cubit<ProfileStates> {
   ProfileCubit() : super(ProfileInitialState());
 
-  LoginModel? _loginModel;
+  AuthModel? _loginModel;
 
-  LoginModel? get profileModel {
+  AuthModel? get profileModel {
     if (_loginModel == null) return null;
-    return LoginModel.copy(_loginModel!);
+    return AuthModel.copy(_loginModel!);
   }
 
   void getProfileData() async {
@@ -21,8 +21,8 @@ class ProfileCubit extends Cubit<ProfileStates> {
     try {
       final response =
           await DioHelper.getRequest(path: kGetProfileDataEndpoint, token: userAccessToken);
-      if (LoginModel.fromJson(response!.data).status) {
-        _loginModel = LoginModel.fromJson(response.data);
+      if (AuthModel.fromJson(response!.data).status) {
+        _loginModel = AuthModel.fromJson(response.data);
 
         emit(ProfileGetDataSuccessState());
       } else {

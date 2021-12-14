@@ -1,6 +1,6 @@
 import 'package:eshtri/modules/about_us/about_us_screen.dart';
-import 'package:eshtri/modules/login/cubit/login_cubit.dart';
-import 'package:eshtri/modules/login/login_screen.dart';
+import 'package:eshtri/modules/auth/cubit/auth_cubit.dart';
+import 'package:eshtri/modules/auth/login/login_screen.dart';
 import 'package:eshtri/modules/profile/profile_screen.dart';
 import 'package:eshtri/modules/settings/settings.dart';
 import 'package:flutter/material.dart';
@@ -66,9 +66,11 @@ class ProfileAndMoreTab extends StatelessWidget {
             ),
             InkWell(
               onTap: () async {
-                await BlocProvider.of<LoginCubit>(context).logTheUserOut();
-                Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+                try {
+                  await BlocProvider.of<AuthCubit>(context).logTheUserOut();
+                  Navigator.pushReplacement(
+                      context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+                } catch (_) {}
               },
               child: ListTile(
                 leading: const Icon(Icons.logout_outlined),

@@ -1,4 +1,4 @@
-import 'package:eshtri/modules/login/login_screen.dart';
+import 'package:eshtri/modules/auth/login/login_screen.dart';
 import 'package:eshtri/shared/network/local/cache_helper.dart';
 import 'package:eshtri/shared/styles/colors.dart';
 import 'package:flutter/material.dart';

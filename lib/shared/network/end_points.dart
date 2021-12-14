@@ -1,4 +1,6 @@
 const kLoginEndpoint = 'login';
+const kRegisterEndpoint = 'register';
+const kLogoutEndpoint = 'logout';
 
 const kHomeEndpoint = 'home';
 

@@ -2,8 +2,7 @@ import 'package:eshtri/layout/home_layout.dart';
 import 'package:eshtri/modules/about_us/about_us_screen.dart';
 import 'package:eshtri/modules/categories/cubit/categories_cubit.dart';
 import 'package:eshtri/modules/home/cubit/home_cubit.dart';
-import 'package:eshtri/modules/login/cubit/login_cubit.dart';
-import 'package:eshtri/modules/login/login_screen.dart';
+import 'package:eshtri/modules/auth/login/login_screen.dart';
 import 'package:eshtri/modules/search/search_screen.dart';
 import 'package:eshtri/modules/settings/settings.dart';
 import 'package:eshtri/shared/components/constants/constants.dart';
@@ -13,6 +12,7 @@ import 'package:eshtri/shared/styles/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'modules/auth/cubit/auth_cubit.dart';
 import 'modules/on_boarding/on_boarding_screen.dart';
 import 'modules/profile/cubit/profile_cubit.dart';
 import 'modules/profile/profile_screen.dart';
@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
           create: (context) => AppCubit()..toggleThemeMode(sharedPrefIsDark),
         ),
         BlocProvider(
-          create: (context) => LoginCubit(),
+          create: (context) =>AuthCubit(),
         ),
         BlocProvider(
           create: (context) => HomeCubit()..getHomeData(userAccessToken!),

@@ -1,14 +1,14 @@
-class LoginModel {
+class AuthModel {
   late final bool status;
   late final String? message;
   late final UserData? data;
 
-  LoginModel.fromJson(Map<String, dynamic> json) {
+  AuthModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
     data = json['data'] != null ? UserData.fromJson(json['data']) : null;
   }
-  LoginModel.copy(LoginModel model) {
+  AuthModel.copy(AuthModel model) {
     status = model.status;
     message = model.message;
     data = UserData.copy(model.data!);
