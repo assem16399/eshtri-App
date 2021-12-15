@@ -10,6 +10,7 @@ class HomeModel {
     status = json['status'];
     data = json['data'] != null ? HomeData.fromJson(json['data']) : null;
   }
+  // to return a clone not just a reference copy
   HomeModel.copy(HomeModel model) {
     status = model.status;
     data = HomeData.copy(model.data!);
@@ -27,6 +28,8 @@ class HomeData {
       products.add(SingleProductModel().fromJson(product));
     });
   }
+
+  // to return a clone not just a reference copy
   HomeData.copy(HomeData model) {
     for (var banner in model.banners) {
       banners.add(BannerModel.copy(banner));
@@ -49,6 +52,8 @@ class BannerModel {
     category = json['category'];
     product = json['product'];
   }
+
+  // to return a clone not just a reference copy
   BannerModel.copy(BannerModel model) {
     id = model.id;
     imageUrl = model.imageUrl;

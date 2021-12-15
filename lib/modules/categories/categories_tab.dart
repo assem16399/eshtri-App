@@ -11,18 +11,11 @@ class CategoriesTab extends StatefulWidget {
 }
 
 class _CategoriesTabState extends State<CategoriesTab> {
-  bool? _isLoading = false;
   @override
   void initState() {
     // TODO: implement initState
-    _isLoading = true;
-    BlocProvider.of<CategoriesCubit>(context).getCategories().then((_) {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    });
+
+    BlocProvider.of<CategoriesCubit>(context).getCategories();
     super.initState();
   }
 
@@ -33,7 +26,7 @@ class _CategoriesTabState extends State<CategoriesTab> {
         listener: (context, categoriesState) {},
         builder: (context, categoriesState) {
           final categoriesModel = BlocProvider.of<CategoriesCubit>(context).categoriesModel;
-          if (!_isLoading!) {
+          if (categoriesState is! CategoriesLoadingState) {
             return ListView.separated(
               separatorBuilder: (context, index) => const Divider(),
               itemCount: categoriesModel!.data!.categories.length,

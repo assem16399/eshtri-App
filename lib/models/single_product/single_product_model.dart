@@ -1,9 +1,10 @@
 import 'package:bloc/bloc.dart';
-import 'package:eshtri/models/single_product/single_product_model_states.dart';
 import 'package:eshtri/shared/components/constants/constants.dart';
 import 'package:eshtri/shared/components/toast.dart';
 import 'package:eshtri/shared/network/end_points.dart';
 import 'package:eshtri/shared/network/remote/dio_helper.dart';
+
+import 'single_product_model_states.dart';
 
 class SingleProductModel extends Cubit<SingleProductModelStates> {
   late final dynamic id;
@@ -33,6 +34,7 @@ class SingleProductModel extends Cubit<SingleProductModelStates> {
     return this;
   }
 
+  // to return a clone not just a reference copy
   SingleProductModel copy() {
     return this;
   }

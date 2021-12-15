@@ -17,18 +17,11 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
-  bool? _isLoading = false;
   @override
   void initState() {
     // TODO: implement initState
-    _isLoading = true;
-    BlocProvider.of<HomeCubit>(context).getHomeData().then((value) {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    });
+
+    BlocProvider.of<HomeCubit>(context).getHomeData();
     super.initState();
   }
 
@@ -38,7 +31,7 @@ class _HomeTabState extends State<HomeTab> {
       listener: (context, homeState) {},
       builder: (context, homeState) {
         final homeModel = BlocProvider.of<HomeCubit>(context).homeModel;
-        if (_isLoading!) {
+        if (homeState is HomeLoadingState) {
           return const Center(
             child: CircularProgressIndicator(),
           );

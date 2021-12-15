@@ -1,5 +1,3 @@
-import 'package:eshtri/shared/components/widgets/product_card_item.dart';
-
 class AuthModel {
   late final bool status;
   late final String? message;

@@ -6,5 +6,7 @@ const kHomeEndpoint = 'home';
 const kSetFavoriteStatusEndpoint = 'favorites';
 const kGetCategoriesEndpoint = 'categories';
 
+const kProductsSearchEndpoint = 'products/search';
+
 const kGetProfileDataEndpoint = 'profile';
 const kUpdateProfileDataEndpoint = 'update-profile';

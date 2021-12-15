@@ -88,10 +88,10 @@ class MyApp extends StatelessWidget {
                       ? const HomeLayout()
                       : BlocProvider.of<AuthCubit>(context).tryAutoLogin()
                           ? const HomeLayout()
-                          : LoginScreen()
+                          : const LoginScreen()
                   : OnBoardingScreen(),
               routes: {
-                SearchScreen.routeName: (context) => const SearchScreen(),
+                SearchScreen.routeName: (context) => SearchScreen(),
                 ProfileScreen.routeName: (context) => const ProfileScreen(),
                 SettingsScreen.routeName: (context) => const SettingsScreen(),
                 AboutUsScreen.routeName: (context) => const AboutUsScreen(),

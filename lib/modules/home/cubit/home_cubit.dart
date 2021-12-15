@@ -29,14 +29,16 @@ class HomeCubit extends Cubit<HomeStates> {
   }
 
   String? tempToken;
-
   Future<void> getHomeData([bool forceRefresh = false]) async {
-    if (tempToken == null || forceRefresh == true) {
+    if (tempToken == null || forceRefresh == true || tempToken != userAccessToken) {
+      // get the data
       emit(HomeLoadingState());
       try {
-        final response = await DioHelper.getRequest(path: kHomeEndpoint, token: userAccessToken);
+        final response = await DioHelper.getRequest(path: kHomeEndpoint);
         if (HomeModel.fromJson(response!.data).status) {
           _homeModel = HomeModel.fromJson(response.data);
+
+          //Assign user token to the tempToken
           tempToken = userAccessToken;
 
           emit(HomeSuccessState());
@@ -47,25 +49,6 @@ class HomeCubit extends Cubit<HomeStates> {
       } catch (error) {
         print(error.toString());
         emit(HomeFailState());
-      }
-    } else {
-      if (tempToken != userAccessToken) {
-        emit(HomeLoadingState());
-        try {
-          final response = await DioHelper.getRequest(path: kHomeEndpoint, token: userAccessToken);
-          if (HomeModel.fromJson(response!.data).status) {
-            _homeModel = HomeModel.fromJson(response.data);
-            tempToken = userAccessToken;
-
-            emit(HomeSuccessState());
-          } else {
-            print('error in getting Data');
-            emit(HomeFailState());
-          }
-        } catch (error) {
-          print(error.toString());
-          emit(HomeFailState());
-        }
       }
     }
   }
