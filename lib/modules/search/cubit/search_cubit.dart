@@ -27,6 +27,7 @@ class SearchCubit extends Cubit<SearchStates> {
       if (response.data['status']) {
         _searchedProductsModel = CategoryProductsModel.fromJson(response.data);
         emit(SearchSuccessState());
+        print('token for getting searched products is: $userAccessToken');
         if (_searchedProductsModel!.data!.products.isEmpty) {
           toast(toastMsg: 'Could not find any results');
         }

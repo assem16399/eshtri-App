@@ -24,8 +24,18 @@ class HomeCubit extends Cubit<HomeStates> {
     return _homeModel!.data!.products.firstWhere((element) => element.id == id);
   }
 
-  void refreshFavoriteList() {
-    emit(ChangeProductFavoriteStatus());
+  void refreshHomeProductsFavoriteStatus([int? updatedProductId]) {
+    if (updatedProductId == null) {
+      emit(ChangeProductFavoriteStatus());
+      return;
+    } else {
+      final updatedProductIndex =
+          _homeModel!.data!.products.indexWhere((element) => element.id == updatedProductId);
+      if (updatedProductIndex == -1) return;
+      _homeModel!.data!.products[updatedProductIndex].inFavorites =
+          !_homeModel!.data!.products[updatedProductIndex].inFavorites;
+      emit(ChangeProductFavoriteStatus());
+    }
   }
 
   String? tempToken;
@@ -34,7 +44,7 @@ class HomeCubit extends Cubit<HomeStates> {
       // get the data
       emit(HomeLoadingState());
       try {
-        final response = await DioHelper.getRequest(path: kHomeEndpoint);
+        final response = await DioHelper.getRequest(path: kHomeEndpoint, token: userAccessToken);
         if (HomeModel.fromJson(response!.data).status) {
           _homeModel = HomeModel.fromJson(response.data);
 

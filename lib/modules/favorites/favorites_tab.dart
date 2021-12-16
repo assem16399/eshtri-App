@@ -1,47 +1,73 @@
 import 'package:eshtri/models/single_product/single_product_model.dart';
 import 'package:eshtri/models/single_product/single_product_model_states.dart';
+import 'package:eshtri/modules/favorites/cubit/favorites_cubit.dart';
+import 'package:eshtri/modules/favorites/cubit/favorites_states.dart';
 import 'package:eshtri/modules/home/cubit/home_cubit.dart';
 import 'package:eshtri/shared/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class FavoritesTab extends StatelessWidget {
+class FavoritesTab extends StatefulWidget {
   const FavoritesTab({Key? key}) : super(key: key);
 
   @override
+  State<FavoritesTab> createState() => _FavoritesTabState();
+}
+
+class _FavoritesTabState extends State<FavoritesTab> {
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    BlocProvider.of<FavoritesCubit>(context).getFavoriteProducts();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final products = BlocProvider.of<HomeCubit>(context, listen: true).favProducts;
-    return products.isEmpty
-        ? Center(
-            child: Text(
-              'Start Adding Some Favorite Products Now 💓',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.headline3!.copyWith(color: kPrimarySwatchColor),
-            ),
-          )
-        : ListView.separated(
-            separatorBuilder: (_, __) => const Divider(),
-            itemCount: products.length,
-            itemBuilder: (_, index) => BlocProvider.value(
-              value: products[index],
-              child: FavoriteProductsListItem(
-                id: products[index].id,
-              ),
-            ),
-          );
+    return BlocConsumer<FavoritesCubit, FavoritesStates>(
+        listener: (context, favoritesState) {},
+        builder: (context, favoritesState) {
+          final products = BlocProvider.of<FavoritesCubit>(context).favoriteProducts;
+          return favoritesState is FavoritesLoadingState
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : products.isEmpty
+                  ? Center(
+                      child: Text(
+                        'Start Adding Some Favorite Products Now 💓',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline3!
+                            .copyWith(color: kPrimarySwatchColor),
+                      ),
+                    )
+                  : ListView.separated(
+                      separatorBuilder: (_, __) => const Divider(),
+                      itemCount: products.length,
+                      itemBuilder: (_, index) => BlocProvider.value(
+                        value: products[index].singleProductModel,
+                        child: FavoriteProductsListItem(
+                          product: products[index].singleProductModel,
+                        ),
+                      ),
+                    );
+        });
   }
 }
 
 class FavoriteProductsListItem extends StatelessWidget {
   const FavoriteProductsListItem({
-    required this.id,
+    required this.product,
     Key? key,
   }) : super(key: key);
-  final int id;
+  final SingleProductModel product;
+
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    final product = BlocProvider.of<HomeCubit>(context).findProductById(id);
     return InkWell(
       onTap: () {},
       child: ListTile(
@@ -57,14 +83,17 @@ class FavoriteProductsListItem extends StatelessWidget {
         trailing: IconButton(
           onPressed: () async {
             await BlocProvider.of<SingleProductModel>(context).toggleFavoriteStates();
-            BlocProvider.of<HomeCubit>(context).refreshFavoriteList();
+            BlocProvider.of<HomeCubit>(context).refreshHomeProductsFavoriteStatus(product.id);
+            BlocProvider.of<FavoritesCubit>(context).refreshFavoriteList();
           },
           icon: BlocConsumer<SingleProductModel, SingleProductModelStates>(
             listener: (context, singleProductState) {},
-            builder: (context, singleProductState) => Icon(
-              product.inFavorites ? Icons.favorite_outlined : Icons.favorite_border_outlined,
-              color: Colors.deepOrange,
-            ),
+            builder: (context, singleProductState) {
+              return Icon(
+                product.inFavorites ? Icons.favorite_outlined : Icons.favorite_border_outlined,
+                color: Colors.deepOrange,
+              );
+            },
           ),
         ),
       ),

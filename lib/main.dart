@@ -14,6 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'modules/auth/cubit/auth_cubit.dart';
 import 'modules/auth/cubit/auth_states.dart';
+import 'modules/favorites/cubit/favorites_cubit.dart';
 import 'modules/on_boarding/on_boarding_screen.dart';
 import 'modules/profile/cubit/profile_cubit.dart';
 import 'modules/profile/profile_screen.dart';
@@ -70,6 +71,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => ProfileCubit(),
+        ),
+        BlocProvider(
+          create: (context) => FavoritesCubit(),
         ),
       ],
       child: BlocConsumer<AppCubit, AppStates>(

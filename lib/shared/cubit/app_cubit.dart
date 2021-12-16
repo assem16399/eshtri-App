@@ -12,7 +12,7 @@ class AppCubit extends Cubit<AppStates> {
     return _isDark;
   }
 
-  void toggleThemeMode([bool? fromPrefIsDark = null]) {
+  void toggleThemeMode([bool? fromPrefIsDark]) {
     if (fromPrefIsDark != null) {
       _isDark = fromPrefIsDark;
     } else {

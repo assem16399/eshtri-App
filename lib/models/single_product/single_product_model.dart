@@ -13,10 +13,10 @@ class SingleProductModel extends Cubit<SingleProductModelStates> {
   late final dynamic price;
   late final dynamic oldPrice;
   late final dynamic discount;
-  late final List<dynamic> images;
+  late final List<dynamic>? images;
   late final String description;
   late bool inFavorites;
-  late bool inCart;
+  late bool? inCart;
 
   SingleProductModel() : super(SingleProductModelInitialState());
 
@@ -29,7 +29,7 @@ class SingleProductModel extends Cubit<SingleProductModelStates> {
     discount = json['discount'];
     description = json['description'];
     images = json['images'];
-    inFavorites = json['in_favorites'];
+    inFavorites = json['in_favorites'] ?? true;
     inCart = json['in_cart'];
     return this;
   }
@@ -47,11 +47,13 @@ class SingleProductModel extends Cubit<SingleProductModelStates> {
           path: kSetFavoriteStatusEndpoint, data: {'product_id': id}, token: userAccessToken);
       if (!response.data['status']) {
         inFavorites = !inFavorites;
+
         toast(toastMsg: response.data['message'].toString());
         emit(SingleProductModelChangeFavoriteState());
       }
     } catch (error) {
       inFavorites = !inFavorites;
+
       print(error.toString());
       toast(toastMsg: 'Something Went Wrong!');
       emit(SingleProductModelChangeFavoriteState());
