@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductCardItem extends StatelessWidget {
+  final bool isHome;
   const ProductCardItem({
     Key? key,
     required this.id,
+    this.isHome = true,
   }) : super(key: key);
 
   final int id;
@@ -116,6 +118,9 @@ class ProductCardItem extends StatelessWidget {
             child: GestureDetector(
               onTap: () {
                 BlocProvider.of<SingleProductModel>(context).toggleFavoriteStates();
+                if (!isHome) {
+                  BlocProvider.of<HomeCubit>(context).refreshHomeProductsFavoriteStatus(id);
+                }
               },
               child: BlocConsumer<SingleProductModel, SingleProductModelStates>(
                 listener: (context, singleProductState) {},

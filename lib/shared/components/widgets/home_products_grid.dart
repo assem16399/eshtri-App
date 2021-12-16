@@ -5,8 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'product_card_item.dart';
 
 class HomeProductsGrid extends StatelessWidget {
-  const HomeProductsGrid({Key? key, required this.products}) : super(key: key);
+  const HomeProductsGrid({Key? key, required this.products, this.isHome = true}) : super(key: key);
   final List<SingleProductModel> products;
+  final bool isHome;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +25,7 @@ class HomeProductsGrid extends StatelessWidget {
       itemBuilder: (context, index) => BlocProvider.value(
         value: products[index],
         child: ProductCardItem(
+          isHome: isHome,
           id: products[index].id,
         ),
       ),

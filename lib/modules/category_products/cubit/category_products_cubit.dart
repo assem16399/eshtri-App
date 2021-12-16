@@ -14,7 +14,7 @@ class CategoryProductsCubit extends Cubit<CategoryProductsStates> {
   List<SingleProductModel> get categoryProductsModel {
     if (_categoryProductsModel == null) return [];
     if (_categoryProductsModel!.data == null) return [];
-    return CategoryProductsModel.copy(_categoryProductsModel!).data!.products;
+    return CategoryProductsModel.copy(_categoryProductsModel!).data!.products.toList();
   }
 
   List<SingleProductModel> get favProducts {
@@ -56,6 +56,7 @@ class CategoryProductsCubit extends Cubit<CategoryProductsStates> {
         );
         if (response!.data['status']) {
           _categoryProductsModel = CategoryProductsModel.fromJson(response.data);
+          print(_categoryProductsModel!.data!.products[0].name);
           tempToken = userAccessToken;
           tempCategoryId = categoryId;
           emit(CategoryProductsGetSuccessState());

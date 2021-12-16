@@ -1,5 +1,6 @@
 import 'package:eshtri/modules/categories/cubit/categories_cubit.dart';
 import 'package:eshtri/modules/categories/cubit/categories_states.dart';
+import 'package:eshtri/modules/category_products/category_products_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -31,7 +32,10 @@ class _CategoriesTabState extends State<CategoriesTab> {
               separatorBuilder: (context, index) => const Divider(),
               itemCount: categoriesModel!.data!.categories.length,
               itemBuilder: (context, index) => InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).pushNamed(CategoryProductsScreen.routeName,
+                      arguments: categoriesModel.data!.categories[index].id);
+                },
                 child: ListTile(
                   minLeadingWidth: deviceSize.width * 0.25,
                   leading: SizedBox(

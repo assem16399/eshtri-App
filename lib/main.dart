@@ -14,6 +14,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'modules/auth/cubit/auth_cubit.dart';
 import 'modules/auth/cubit/auth_states.dart';
+import 'modules/category_products/category_products_screen.dart';
+import 'modules/category_products/cubit/category_products_cubit.dart';
 import 'modules/favorites/cubit/favorites_cubit.dart';
 import 'modules/on_boarding/on_boarding_screen.dart';
 import 'modules/profile/cubit/profile_cubit.dart';
@@ -75,6 +77,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => FavoritesCubit(),
         ),
+        BlocProvider(
+          create: (context) => CategoryProductsCubit(),
+        ),
       ],
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (context, appState) {},
@@ -99,6 +104,7 @@ class MyApp extends StatelessWidget {
                 ProfileScreen.routeName: (context) => const ProfileScreen(),
                 SettingsScreen.routeName: (context) => const SettingsScreen(),
                 AboutUsScreen.routeName: (context) => const AboutUsScreen(),
+                CategoryProductsScreen.routeName: (context) => const CategoryProductsScreen(),
               },
             ),
           );
