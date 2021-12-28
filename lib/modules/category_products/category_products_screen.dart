@@ -36,13 +36,18 @@ class _CategoryProductsScreenState extends State<CategoryProductsScreen> {
               return const Center(
                 child: CircularProgressIndicator(),
               );
+            } else if (categoryProductsState is CategoryProductsGetSuccessState) {
+              return SingleChildScrollView(
+                child: HomeProductsGrid(
+                  isHome: false,
+                  products: products,
+                ),
+              );
+            } else {
+              return const Center(
+                child: Text('Something went Wrong!'),
+              );
             }
-            return SingleChildScrollView(
-              child: HomeProductsGrid(
-                isHome: false,
-                products: products,
-              ),
-            );
           }),
     );
   }

@@ -49,8 +49,8 @@ class ProfileCubit extends Cubit<ProfileStates> {
             emit(ProfileGetDataFailState());
           }
         } catch (error) {
-          print(error.toString());
           emit(ProfileGetDataFailState());
+          rethrow;
         }
       }
     }

@@ -33,27 +33,29 @@ class _FavoritesTabState extends State<FavoritesTab> {
               ? const Center(
                   child: CircularProgressIndicator(),
                 )
-              : products.isEmpty
-                  ? Center(
-                      child: Text(
-                        'Start Adding Some Favorite Products Now 💓',
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline3!
-                            .copyWith(color: kPrimarySwatchColor),
-                      ),
-                    )
-                  : ListView.separated(
-                      separatorBuilder: (_, __) => const Divider(),
-                      itemCount: products.length,
-                      itemBuilder: (_, index) => BlocProvider.value(
-                        value: products[index].singleProductModel,
-                        child: FavoriteProductsListItem(
-                          product: products[index].singleProductModel,
-                        ),
-                      ),
-                    );
+              : favoritesState is FavoritesGetSuccessState
+                  ? products.isEmpty
+                      ? Center(
+                          child: Text(
+                            'Start Adding Some Favorite Products Now 💓',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline3!
+                                .copyWith(color: kPrimarySwatchColor),
+                          ),
+                        )
+                      : ListView.separated(
+                          separatorBuilder: (_, __) => const Divider(),
+                          itemCount: products.length,
+                          itemBuilder: (_, index) => BlocProvider.value(
+                            value: products[index].singleProductModel,
+                            child: FavoriteProductsListItem(
+                              product: products[index].singleProductModel,
+                            ),
+                          ),
+                        )
+                  : const Center(child: Text('Something Went Wrong!'));
         });
   }
 }

@@ -57,8 +57,8 @@ class HomeCubit extends Cubit<HomeStates> {
           emit(HomeFailState());
         }
       } catch (error) {
-        print(error.toString());
         emit(HomeFailState());
+        rethrow;
       }
     }
   }

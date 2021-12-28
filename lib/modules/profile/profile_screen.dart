@@ -17,6 +17,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final formKey = GlobalKey<FormState>();
   var _enabled = false;
   bool? _isLoading = false;
+  var _errorOcurred = false;
 
   UserData? updatedUserData = UserData(
     id: null,
@@ -57,12 +58,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     BlocProvider.of<ProfileCubit>(context).getProfileData().then((_) {
       if (mounted) {
         setState(() {
+          _errorOcurred = false;
           _isLoading = false;
         });
       }
     }).catchError((_) {
       if (mounted) {
         setState(() {
+          _errorOcurred = true;
           _isLoading = false;
         });
       }
@@ -82,88 +85,92 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: Form(
-                  key: formKey,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        DefaultTextField(
-                          enabled: _enabled,
-                          initialValue: profileModel!.data!.name,
-                          type: TextInputType.name,
-                          label: 'Your Name',
-                          preIcon: Icons.face_rounded,
-                          validator: (String? value) {
-                            if (value!.isEmpty) {
-                              return 'Please Enter your Name';
-                            } else {
-                              return null;
-                            }
-                          },
-                          onSaved: (value) {
-                            updatedUserData = updatedUserData!.copyWith(name: value);
-                          },
+          : !_errorOcurred
+              ? Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                    ),
+                    child: Form(
+                      key: formKey,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            DefaultTextField(
+                              enabled: _enabled,
+                              initialValue: profileModel!.data!.name,
+                              type: TextInputType.name,
+                              label: 'Your Name',
+                              preIcon: Icons.face_rounded,
+                              validator: (String? value) {
+                                if (value!.isEmpty) {
+                                  return 'Please Enter your Name';
+                                } else {
+                                  return null;
+                                }
+                              },
+                              onSaved: (value) {
+                                updatedUserData = updatedUserData!.copyWith(name: value);
+                              },
+                            ),
+                            DefaultTextField(
+                              enabled: _enabled,
+                              initialValue: profileModel.data!.email,
+                              type: TextInputType.emailAddress,
+                              label: 'Your Email',
+                              preIcon: Icons.email_outlined,
+                              validator: (String? value) {
+                                if (value!.isEmpty) {
+                                  return 'Please Enter your Email Address';
+                                }
+                                if (!value.contains('@') || !value.contains('.')) {
+                                  return 'Please Enter a valid Email';
+                                }
+                                return null;
+                              },
+                              onSaved: (value) {
+                                updatedUserData = updatedUserData!.copyWith(email: value);
+                              },
+                            ),
+                            DefaultTextField(
+                              enabled: _enabled,
+                              initialValue: profileModel.data!.phone,
+                              type: TextInputType.phone,
+                              label: 'Your Phone',
+                              preIcon: Icons.phone,
+                              validator: (String? value) {
+                                if (value!.isEmpty) {
+                                  return 'Please Enter your Phone';
+                                }
+                                return null;
+                              },
+                              onSaved: (value) {
+                                updatedUserData = updatedUserData!.copyWith(phone: value);
+                              },
+                            ),
+                            _isLoading!
+                                ? const Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : ElevatedButton(
+                                    onPressed: () {
+                                      if (_enabled) {
+                                        submitUpdateProfileForm();
+                                      }
+                                      setState(() {
+                                        _enabled = true;
+                                      });
+                                    },
+                                    child: Text(_enabled ? 'update' : 'Edit'))
+                          ],
                         ),
-                        DefaultTextField(
-                          enabled: _enabled,
-                          initialValue: profileModel.data!.email,
-                          type: TextInputType.emailAddress,
-                          label: 'Your Email',
-                          preIcon: Icons.email_outlined,
-                          validator: (String? value) {
-                            if (value!.isEmpty) {
-                              return 'Please Enter your Email Address';
-                            }
-                            if (!value.contains('@') || !value.contains('.')) {
-                              return 'Please Enter a valid Email';
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            updatedUserData = updatedUserData!.copyWith(email: value);
-                          },
-                        ),
-                        DefaultTextField(
-                          enabled: _enabled,
-                          initialValue: profileModel.data!.phone,
-                          type: TextInputType.phone,
-                          label: 'Your Phone',
-                          preIcon: Icons.phone,
-                          validator: (String? value) {
-                            if (value!.isEmpty) {
-                              return 'Please Enter your Phone';
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            updatedUserData = updatedUserData!.copyWith(phone: value);
-                          },
-                        ),
-                        _isLoading!
-                            ? const Center(
-                                child: CircularProgressIndicator(),
-                              )
-                            : ElevatedButton(
-                                onPressed: () {
-                                  if (_enabled) {
-                                    submitUpdateProfileForm();
-                                  }
-                                  setState(() {
-                                    _enabled = true;
-                                  });
-                                },
-                                child: Text(_enabled ? 'update' : 'Edit'))
-                      ],
+                      ),
                     ),
                   ),
+                )
+              : const Center(
+                  child: Text('Something Went wrong!'),
                 ),
-              ),
-            ),
     );
   }
 }

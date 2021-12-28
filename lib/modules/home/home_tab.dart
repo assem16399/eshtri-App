@@ -36,10 +36,14 @@ class _HomeTabState extends State<HomeTab> {
             child: CircularProgressIndicator(),
           );
         } else {
-          return HomePageContents(
-            banners: homeModel!.data!.banners,
-            products: homeModel.data!.products,
-          );
+          if (homeState is HomeSuccessState) {
+            return HomePageContents(
+              banners: homeModel!.data!.banners,
+              products: homeModel.data!.products,
+            );
+          } else {
+            return Text('something went wrong!', style: Theme.of(context).textTheme.bodyText1);
+          }
         }
       },
     );

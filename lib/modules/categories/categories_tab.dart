@@ -27,7 +27,7 @@ class _CategoriesTabState extends State<CategoriesTab> {
         listener: (context, categoriesState) {},
         builder: (context, categoriesState) {
           final categoriesModel = BlocProvider.of<CategoriesCubit>(context).categoriesModel;
-          if (categoriesState is! CategoriesLoadingState) {
+          if (categoriesState is CategoriesGetSuccessState) {
             return ListView.separated(
               separatorBuilder: (context, index) => const Divider(),
               itemCount: categoriesModel!.data!.categories.length,
@@ -52,9 +52,13 @@ class _CategoriesTabState extends State<CategoriesTab> {
                 ),
               ),
             );
-          } else {
+          } else if (categoriesState is CategoriesLoadingState) {
             return const Center(
               child: CircularProgressIndicator(),
+            );
+          } else {
+            return const Center(
+              child: Text('Something Went Wrong!'),
             );
           }
         });
